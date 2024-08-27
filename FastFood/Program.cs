@@ -1,6 +1,7 @@
 using FastFood;
 using FastFood.Data;
 using FastFood.Interfaces;
+using FastFood.Middleware;
 using FastFood.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddTransient<Seed>();
+
+
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+// registers automapper 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//registers the relationship between the interface and the repository implementing it
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddScoped<IRestaurantRepository,  RestaurantRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// used to register the Identity Authorization into the services collection
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -32,11 +42,13 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+// registers the db context  with the dql server database
 builder.Services.AddDbContext<DataContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthorization();
 
+// registers the datacontext with the IdentityUser
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<DataContext>();
 
@@ -63,11 +75,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.MapIdentityApi<IdentityUser>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+// injects the custom middleware into the API pipeline
+// also done after authorization in pipeline for this one
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+
+
 app.MapControllers();
+
 
 app.Run();
