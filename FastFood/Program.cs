@@ -1,5 +1,6 @@
 using FastFood;
 using FastFood.Data;
+using FastFood.Filters;
 using FastFood.Interfaces;
 using FastFood.Middleware;
 using FastFood.Repositories;
@@ -15,10 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddTransient<Seed>();
-
-
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // registers automapper 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -42,7 +39,7 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-// registers the db context  with the dql server database
+// registers the db context  with the sql server database inside the dependency injection container
 builder.Services.AddDbContext<DataContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

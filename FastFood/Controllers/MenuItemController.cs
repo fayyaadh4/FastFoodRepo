@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FastFood.Dto;
+using FastFood.Filters;
 using FastFood.Interfaces;
 using FastFood.Models;
 using FastFood.Repositories;

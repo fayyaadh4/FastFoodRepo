@@ -5,6 +5,7 @@ using System.Text.Json;
 
 namespace FastFood.Middleware
 {
+    // done for all requests
     public class GlobalErrorHandlingMiddleware 
     {
         private readonly RequestDelegate _next;
