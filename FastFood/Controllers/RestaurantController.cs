@@ -124,7 +124,7 @@ namespace FastFood.Controllers
 
             if (!_restaurantRepository.UpdateRestaurant(restaurantMap))
             {
-                ModelState.AddModelError("", "Something went wrong while updating");
+                ModelState.AddModelError("", "Something went wrong while updating the restaurant");
                 return StatusCode(500, ModelState);
             }
 
@@ -149,7 +149,7 @@ namespace FastFood.Controllers
 
             if (!_menuItemRepository.DeleteMenuItems(menuItemsToDelete.ToList()))
             {
-                ModelState.AddModelError("", "Something went wrong deleting reviews");
+                ModelState.AddModelError("", "Something went wrong deleting menu Item");
                 return StatusCode(500, ModelState);
             }
 
