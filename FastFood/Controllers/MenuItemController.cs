@@ -100,7 +100,7 @@ namespace FastFood.Controllers
                 return BadRequest(ModelState);
 
             if (!_menuItemRepository.MenuItemExists(id)) 
-                return NotFound("Menu Item not found");
+                return NotFound("Menu Item not found!!");
 
             if (id != menuItemUpdate.Id)
                 return BadRequest(ModelState);
@@ -110,7 +110,7 @@ namespace FastFood.Controllers
             if (!_menuItemRepository.UpdateMenuItem(menuItemMap))
             {
 
-                ModelState.AddModelError("", "Couldnt update owner");
+                ModelState.AddModelError("", "Error Updating owner");
                 return StatusCode(500, ModelState);
             }
 
