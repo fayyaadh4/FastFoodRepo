@@ -155,7 +155,7 @@ namespace FastFood.Controllers
 
             if (!_restaurantRepository.DeleteRestaurant(restaurantsToDelete))
             {
-                ModelState.AddModelError("", "Error deleting pokemon");
+                ModelState.AddModelError("", "Error deleting restaurant");
                 return StatusCode(500, ModelState);
             }
 

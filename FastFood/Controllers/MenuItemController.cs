@@ -110,7 +110,7 @@ namespace FastFood.Controllers
             if (!_menuItemRepository.UpdateMenuItem(menuItemMap))
             {
 
-                ModelState.AddModelError("", "Error While updating owner");
+                ModelState.AddModelError("", "Error While updating menu item");
                 return StatusCode(500, ModelState);
             }
 
