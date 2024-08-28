@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FastFood.Data;
+using FastFood.Dto;
 using FastFood.Interfaces;
 using FastFood.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,13 @@ namespace FastFood.Repositories
         public RestaurantRepository(DataContext context)
         {
             _context = context;
+        }
+
+        public Restaurant CheckDuplicateRestaurant(RestaurantDto restaurant)
+        {
+            return GetRestaurants()
+                .Where(r => r.Name == restaurant.Name)
+                .FirstOrDefault();
         }
 
         public bool CreateRestaurant(Restaurant restaurant)

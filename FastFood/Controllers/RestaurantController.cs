@@ -77,9 +77,7 @@ namespace FastFood.Controllers
             if (createRestaurant == null)
                 return BadRequest(ModelState);
 
-            var restaurantExists = _restaurantRepository.GetRestaurants()
-                .Where(r => r.Name == createRestaurant.Name)
-                .FirstOrDefault();
+            var restaurantExists = _restaurantRepository.CheckDuplicateRestaurant(createRestaurant);
 
             if (restaurantExists != null)
             {
@@ -105,7 +103,7 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdatePokemon(int restaurantId,
+        public IActionResult UpdateRestaurant(int restaurantId,
              [FromBody] RestaurantDto updateRestaurant)
         {
             if (updateRestaurant == null)

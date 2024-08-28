@@ -1,4 +1,5 @@
-﻿using FastFood.Models;
+﻿using FastFood.Dto;
+using FastFood.Models;
 
 namespace FastFood.Interfaces
 {
@@ -14,5 +15,6 @@ namespace FastFood.Interfaces
 
         bool UpdateRestaurant(Restaurant restaurant);
         bool DeleteRestaurant(Restaurant restaurant);
+        Restaurant CheckDuplicateRestaurant(RestaurantDto restaurant);
     }
 }
