@@ -8,46 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;
+using FastFood.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-builder.Services.AddTransient<Seed>();
-
-// registers automapper 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-//registers the relationship between the interface and the repository implementing it
-builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
-builder.Services.AddScoped<IRestaurantRepository,  RestaurantRepository>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-// used to register the Identity Authorization into the services collection
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
-    });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
-});
-
-// registers the db context  with the sql server database inside the dependency injection container
-builder.Services.AddDbContext<DataContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddAuthorization();
-
-// registers the datacontext with the IdentityUser
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<DataContext>();
+// refactored program.cs file to make it look neater since there were alot of services registered in the dependency injection container
+// passed in the builder configuratio for use in registration of sql server database
+builder.Services.RegisterService(builder.Configuration);
 
 var app = builder.Build();
 
@@ -65,13 +32,8 @@ void SeedData(IHost app)
     }
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+// refactored swagger configuration
+app.ConfigureSwagger();
 
 app.MapIdentityApi<IdentityUser>();
 
