@@ -66,9 +66,7 @@ namespace FastFood.Controllers
             if (!_restaurantRepository.RestaurantExists(createMenuItem.RestaurantId))
                 return BadRequest(ModelState);
 
-            var menuItemExists = _menuItemRepository.GetMenuItems()
-                .Where(r => r.Name == createMenuItem.Name)
-                .FirstOrDefault();
+            var menuItemExists = _menuItemRepository.CheckDuplicateMenuItem(createMenuItem);
 
             if (menuItemExists != null)
             {

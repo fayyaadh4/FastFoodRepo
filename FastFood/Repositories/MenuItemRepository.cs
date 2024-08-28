@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FastFood.Data;
+using FastFood.Dto;
 using FastFood.Interfaces;
 using FastFood.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,14 @@ namespace FastFood.Repositories
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public MenuItem CheckDuplicateMenuItem(MenuItemDto menuItem)
+        {
+            var menuItemExists =  GetMenuItems()
+                .Where(m => m.Name.Trim().ToUpper() == menuItem.Name.Trim().ToUpper())
+                .FirstOrDefault();
+            return menuItemExists;
         }
 
         public bool CreateMenuItem(MenuItem menuItem)
