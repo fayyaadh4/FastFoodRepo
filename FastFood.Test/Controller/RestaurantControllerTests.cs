@@ -29,7 +29,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void RestaurantController_GetRestaurants_ReturnsOk()
+        public async Task RestaurantController_GetRestaurants_ReturnsOk()
         {
             // Arrange: Get variables, functions, etc.
             var restaurantsRepo = A.Fake<ICollection<RestaurantDto>>();
@@ -44,7 +44,7 @@ namespace FastFood.Test.Controller
                 );
 
             // Act: perform action
-            var result = controller.GetRestaurants();
+            var result = await controller.GetRestaurants();
 
             // Assert: What outcome is expected
             result.Should().NotBeNull();
@@ -52,7 +52,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void RestaurantController_GetRestaurant_ReturnsOk()
+        public async Task RestaurantController_GetRestaurant_ReturnsOk()
         {
             // Arrange
             var id = 1;
@@ -70,7 +70,7 @@ namespace FastFood.Test.Controller
                 );
 
             // Act
-            var result = controller.GetRestaurant(id);
+            var result = await controller.GetRestaurant(id);
 
             // Assert
             result.Should().NotBeNull();
@@ -80,7 +80,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void RestaurantController_GetMenuItemsByRestaurant_ReturnsOk()
+        public async Task RestaurantController_GetMenuItemsByRestaurant_ReturnsOk()
         {
             // Arrange
             var id = 1;
@@ -101,7 +101,7 @@ namespace FastFood.Test.Controller
                 );
 
             // Act
-            var result = controller.GetMenuItemsByRestaurant(id);
+            var result = await controller.GetMenuItemsByRestaurant(id);
 
             // Assert
             result.Should().NotBeNull();
@@ -111,14 +111,15 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void RestaurantController_CreateRestaurant_ReturnsOk()
+        public async Task RestaurantController_CreateRestaurant_ReturnsOk()
         {
             // arrange
             var createRestaurant = A.Fake<RestaurantDto>();
             // var restaurantExists = null;
             var restaurantMap = A.Fake<Restaurant>();
+            Restaurant nullRestaurant = null;
             A.CallTo(() => _restaurantRepository.CheckDuplicateRestaurant(createRestaurant))
-            .Returns(null);
+            .Returns(nullRestaurant);
             A.CallTo(() => _mapper.Map<Restaurant>(createRestaurant))
             .Returns(restaurantMap);
             A.CallTo(() => _restaurantRepository.CreateRestaurant(restaurantMap))
@@ -131,7 +132,7 @@ namespace FastFood.Test.Controller
                 );
 
             // act
-            var result = controller.CreateRestaurant(createRestaurant);
+            var result = await controller.CreateRestaurant(createRestaurant);
 
             //assert
             result.Should().NotBeNull();
@@ -140,7 +141,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void RestaurantController_UpdateRestaurant_ReturnsOk()
+        public async Task RestaurantController_UpdateRestaurant_ReturnsOk()
         {
             // arrange
             var id = 1;
@@ -161,7 +162,7 @@ namespace FastFood.Test.Controller
                 );
 
             // act
-            var result = controller.UpdateRestaurant(id, restaurantUpdate);
+            var result = await controller.UpdateRestaurant(id, restaurantUpdate);
 
             //asert
             result.Should().NotBeNull();
@@ -171,7 +172,7 @@ namespace FastFood.Test.Controller
 
 
         [Fact]
-        public void RestaurantController_DeleteRestaurant_ReturnsOk()
+        public async Task RestaurantController_DeleteRestaurant_ReturnsOk()
         {
             // arrange
             var id = 1;
@@ -196,7 +197,7 @@ namespace FastFood.Test.Controller
                 );
 
             // act
-            var result = controller.DeleteRestaurant(id);
+            var result = await controller.DeleteRestaurant(id);
 
             //asert
             result.Should().NotBeNull();

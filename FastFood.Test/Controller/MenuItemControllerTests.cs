@@ -29,7 +29,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void MenuItemController_GetMenuItems_ReturnsOk()
+        public async Task MenuItemController_GetMenuItems_ReturnsOk()
         {
             // Arrange: Get variables, functions, etc.
             var menuItemsRepo = A.Fake<ICollection<MenuItemDto>>();
@@ -44,7 +44,7 @@ namespace FastFood.Test.Controller
                 );
 
             // Act: perform action
-            var result = controller.GetMenuItems();
+            var result = await controller.GetMenuItems();
 
             // Assert: What outcome is expected
             result.Should().NotBeNull();
@@ -52,7 +52,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void MenuItemController_GetMenuItem_ReturnsOk()
+        public async Task MenuItemController_GetMenuItem_ReturnsOk()
         {
             // Arrange
             var menuItemId = 1;
@@ -70,7 +70,7 @@ namespace FastFood.Test.Controller
                 );
 
             // Act
-            var result = controller.GetMenuItem(menuItemId);
+            var result = await controller.GetMenuItem(menuItemId);
 
             // Assert
             result.Should().NotBeNull();
@@ -80,16 +80,17 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void MenuController_CreateMenuItem_ReturnsOk()
+        public async Task MenuController_CreateMenuItem_ReturnsOk()
         {
             // arrange
             var createMenuItem = A.Fake<MenuItemDto>();
             // var menuItemExists = null;
             var menuItemMap = A.Fake<MenuItem>();
+            MenuItem nullMenuItem = null;
             A.CallTo(() => _restaurantRepository.RestaurantExists(createMenuItem.Id))
             .Returns(true);
             A.CallTo(() => _menuItemRepository.CheckDuplicateMenuItem(createMenuItem))
-            .Returns(null);
+            .Returns(nullMenuItem);
             A.CallTo(() => _mapper.Map<MenuItem>(createMenuItem))
             .Returns(menuItemMap);
             A.CallTo(() => _menuItemRepository.CreateMenuItem(menuItemMap))
@@ -102,7 +103,7 @@ namespace FastFood.Test.Controller
                 );
 
             // act
-            var result = controller.CreateMenuItem(createMenuItem);
+            var result = await controller.CreateMenuItem(createMenuItem);
 
             //assert
             result.Should().NotBeNull();
@@ -111,7 +112,7 @@ namespace FastFood.Test.Controller
         }
 
         [Fact]
-        public void MenuItemController_UpdateMenuItem_ReturnsOk()
+        public async Task MenuItemController_UpdateMenuItem_ReturnsOk()
         {
             // arrange
             var id = 1;
@@ -132,7 +133,7 @@ namespace FastFood.Test.Controller
                 );
 
             // act
-            var result = controller.UpdateMenuItem(id, menuItemUpdate);
+            var result = await controller.UpdateMenuItem(id, menuItemUpdate);
 
             //asert
             result.Should().NotBeNull();
@@ -142,7 +143,7 @@ namespace FastFood.Test.Controller
 
 
         [Fact]
-        public void MenuItemController_DeleteMenuItem_ReturnsOk()
+        public async Task MenuItemController_DeleteMenuItem_ReturnsOk()
         {
             // arrange
             var id = 1;
@@ -162,7 +163,7 @@ namespace FastFood.Test.Controller
                 );
 
             // act
-            var result = controller.DeleteMenuItem(id);
+            var result = await controller.DeleteMenuItem(id);
 
             //asert
             result.Should().NotBeNull();
