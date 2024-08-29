@@ -45,6 +45,7 @@ namespace FastFood.Repositories
             return _context.Roles.Where(r => r.Id == id).FirstOrDefault();
         }
 
+
         public ICollection<Role> GetRoles()
         {
             return _context.Roles.OrderBy(r => r.Name).ToList();

@@ -13,6 +13,10 @@ namespace FastFood.Helper
             CreateMap<MenuItem, MenuItemDto>();
             CreateMap<MenuItemDto, MenuItem>();
             CreateMap<Location,  LocationDto>();
+            CreateMap<Employee, EmployeeDto>();
+            CreateMap<EmployeeDto, Employee>();
+            CreateMap<Role, RoleDto>();
+            CreateMap<RoleDto, Role>();
         }
     }
 }

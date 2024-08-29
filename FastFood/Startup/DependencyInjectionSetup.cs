@@ -24,6 +24,9 @@ namespace FastFood.Startup
             //registers the relationship between the interface and the repository implementing it
             services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             // used to register the Identity Authorization into the services collection
