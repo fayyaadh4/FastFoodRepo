@@ -5,17 +5,17 @@ namespace FastFood.Interfaces
 {
     public interface IEmployeeRepository
     {
-        ICollection<Employee> GetEmployees();
-        Employee GetEmployee(int id);
-        bool EmployeeExists(int id);
-        EmployeeLeave GetLeaveByEmployee(int employeeId);
-        ICollection<Employee> GetEmployeesByRestaurant(int restaurantId);
-        bool CreateEmployee(Employee employee);
+        Task<ICollection<Employee>> GetEmployees();
+        Task<Employee> GetEmployee(int id);
+        Task<bool> EmployeeExists(int id);
+        Task<EmployeeLeave> GetLeaveByEmployee(int employeeId);
+        Task<ICollection<Employee>> GetEmployeesByRestaurant(int restaurantId);
+        Task<bool> CreateEmployee(Employee employee);
 
-        bool Save();
+        Task<bool> Save();
 
-        bool UpdateEmployee(Employee employee);
-        bool DeleteEmployee(Employee employee);
-        Employee CheckDuplicateEmployee(EmployeeDto employee);
+        Task<bool> UpdateEmployee(Employee employee);
+        Task<bool> DeleteEmployee(Employee employee);
+        Task<Employee> CheckDuplicateEmployee(EmployeeDto employee);
     }
 }

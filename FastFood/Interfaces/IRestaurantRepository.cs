@@ -5,16 +5,16 @@ namespace FastFood.Interfaces
 {
     public interface IRestaurantRepository
     {
-        ICollection<Restaurant> GetRestaurants();
-        Restaurant GetRestaurant(int id);
-        bool RestaurantExists(int id);
-        ICollection<MenuItem> GetMenuItemsByRestaurant(int restaurantId);
-        bool CreateRestaurant (Restaurant restaurant);
+        Task<ICollection<Restaurant>> GetRestaurants();
+        Task<Restaurant> GetRestaurant(int id);
+        Task<bool> RestaurantExists(int id);
+        Task<ICollection<MenuItem>> GetMenuItemsByRestaurant(int restaurantId);
+        Task<bool> CreateRestaurant (Restaurant restaurant);
 
-        bool Save();
+        Task<bool> Save();
 
-        bool UpdateRestaurant(Restaurant restaurant);
-        bool DeleteRestaurant(Restaurant restaurant);
-        Restaurant CheckDuplicateRestaurant(RestaurantDto restaurant);
+        Task<bool> UpdateRestaurant(Restaurant restaurant);
+        Task<bool> DeleteRestaurant(Restaurant restaurant);
+        Task<Restaurant> CheckDuplicateRestaurant(RestaurantDto restaurant);
     }
 }

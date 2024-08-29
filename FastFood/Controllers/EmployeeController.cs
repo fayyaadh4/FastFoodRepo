@@ -27,9 +27,9 @@ namespace FastFood.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Employee>))]
         [ProducesResponseType(400)]
-        public IActionResult GetEmployees()
+        public async Task<IActionResult> GetEmployees()
         {
-            var employees = _mapper.Map<List<EmployeeDto>>(_employeeRepository.GetEmployees());
+            var employees = _mapper.Map<List<EmployeeDto>>(await _employeeRepository.GetEmployees());
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -40,12 +40,12 @@ namespace FastFood.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(Employee))]
         [ProducesResponseType(400)]
-        public IActionResult GetEmployee(int id) 
+        public async Task<IActionResult> GetEmployee(int id) 
         {
-            if (!_employeeRepository.EmployeeExists(id))
+            if (!await _employeeRepository.EmployeeExists(id))
                 return NotFound();
 
-            var employee = _mapper.Map<EmployeeDto>(_employeeRepository.GetEmployee(id));
+            var employee = _mapper.Map<EmployeeDto>(await _employeeRepository.GetEmployee(id));
             
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,11 +56,11 @@ namespace FastFood.Controllers
         [HttpGet("{employeeId}/leave")]
         [ProducesResponseType(200, Type = typeof(EmployeeLeave))]
         [ProducesResponseType(400)]
-        public IActionResult GetLeaveByEmployee(int employeeId)
+        public async Task<IActionResult> GetLeaveByEmployee(int employeeId)
         {
-            if (!_employeeRepository.EmployeeExists(employeeId))
+            if (!await _employeeRepository.EmployeeExists(employeeId))
                 return NotFound();
-            var employeeLeave = _mapper.Map<EmployeeLeave>(_employeeRepository.GetLeaveByEmployee(employeeId));
+            var employeeLeave = _mapper.Map<EmployeeLeave>(await _employeeRepository.GetLeaveByEmployee(employeeId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -71,12 +71,12 @@ namespace FastFood.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateEmployee([FromBody] EmployeeDto createEmployee)
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto createEmployee)
         {
             if (createEmployee == null)
                 return BadRequest(ModelState);
 
-            var employeeExists = _employeeRepository.CheckDuplicateEmployee(createEmployee);
+            var employeeExists = await _employeeRepository.CheckDuplicateEmployee(createEmployee);
 
             if (employeeExists != null)
             {
@@ -89,7 +89,7 @@ namespace FastFood.Controllers
 
             var employeeMap = _mapper.Map<Employee>(createEmployee);
 
-            if (!_employeeRepository.CreateEmployee(employeeMap))
+            if (!await _employeeRepository.CreateEmployee(employeeMap))
             {
                 ModelState.AddModelError("", "Error creating employee");
                 return StatusCode(500, ModelState);
@@ -106,7 +106,7 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateEmployee(int employeeId, [FromBody] EmployeeDto updateEmployee)
+        public async Task<IActionResult> UpdateEmployee(int employeeId, [FromBody] EmployeeDto updateEmployee)
         {
             if (updateEmployee == null)
                 return BadRequest(ModelState);
@@ -114,10 +114,10 @@ namespace FastFood.Controllers
             if (employeeId != updateEmployee.Id)
                 return BadRequest(ModelState);
 
-            if (!_employeeRepository.EmployeeExists(employeeId))
+            if (!await _employeeRepository.EmployeeExists(employeeId))
                 return NotFound();
 
-            var duplicateEmployee = _employeeRepository.CheckDuplicateEmployee(updateEmployee);
+            var duplicateEmployee = await _employeeRepository.CheckDuplicateEmployee(updateEmployee);
 
             if (duplicateEmployee != null)
             {
@@ -130,7 +130,7 @@ namespace FastFood.Controllers
 
             var employeeMap = _mapper.Map<Employee>(updateEmployee);
 
-            if (!_employeeRepository.UpdateEmployee(employeeMap))
+            if (!await _employeeRepository.UpdateEmployee(employeeMap))
             {
                 ModelState.AddModelError("", "Error updating employee");
                 return StatusCode(500, ModelState);
@@ -148,17 +148,17 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteEmployee(int employeeId)
+        public async Task<IActionResult> DeleteEmployee(int employeeId)
         {
-            if (!_employeeRepository.EmployeeExists(employeeId))
+            if (!await _employeeRepository.EmployeeExists(employeeId))
                 return NotFound();
 
-            var employeeToDelete = _employeeRepository.GetEmployee(employeeId);
+            var employeeToDelete = await _employeeRepository.GetEmployee(employeeId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_employeeRepository.DeleteEmployee(employeeToDelete))
+            if (!await _employeeRepository.DeleteEmployee(employeeToDelete))
             {
                 ModelState.AddModelError("", "Error deleting employee");
                 return StatusCode(500, ModelState);

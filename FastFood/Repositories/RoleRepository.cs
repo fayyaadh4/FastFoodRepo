@@ -15,57 +15,57 @@ namespace FastFood.Repositories
             _context = context;
         }
 
-        public Role CheckDuplicateRole(RoleDto role)
+        public async Task<Role> CheckDuplicateRole(RoleDto role)
         {
-            return GetRoles()
+            return (await GetRoles())
                 .Where(r => r.Name == role.Name)
                 .FirstOrDefault();
         }
 
-        public bool CreateRole(Role role)
+        public async Task<bool> CreateRole(Role role)
         {
             _context.Add(role);
-            return Save();
+            return await Save();
         }
 
-        public bool DeleteRole(Role role)
+        public async Task<bool> DeleteRole(Role role)
         {
             _context.Remove(role);
-            return Save();
+            return await Save();
         }
 
-        public ICollection<Employee> GetEmployeesByRole(int roleId)
+        public async Task<ICollection<Employee>> GetEmployeesByRole(int roleId)
         {
-            return _context.Employees.Where(e => e.RoleId == roleId).ToList();
+            return await _context.Employees.Where(e => e.RoleId == roleId).ToListAsync();
 
         }
 
-        public Role GetRole(int id)
+        public async Task<Role> GetRole(int id)
         {
             return _context.Roles.Where(r => r.Id == id).FirstOrDefault();
         }
 
 
-        public ICollection<Role> GetRoles()
+        public async Task<ICollection<Role>> GetRoles()
         {
-            return _context.Roles.OrderBy(r => r.Name).ToList();
+            return await _context.Roles.OrderBy(r => r.Name).ToListAsync();
         }
 
-        public bool RoleExists(int id)
+        public async Task<bool> RoleExists(int id)
         {
             return _context.Roles.Any(r => r.Id == id);
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
-        public bool UpdateRole(Role role)
+        public async Task<bool> UpdateRole(Role role)
         {
             _context.Update(role);
-            return Save();
+            return await Save();
         }
     }
 

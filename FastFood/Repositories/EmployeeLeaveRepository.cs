@@ -1,6 +1,7 @@
 ﻿using FastFood.Data;
 using FastFood.Interfaces;
 using FastFood.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace FastFood.Repositories
@@ -13,38 +14,38 @@ namespace FastFood.Repositories
         {
             _context = context;   
         }
-        public bool CreateEmployeeLeave(EmployeeLeave employeeLeave)
+        public async Task<bool> CreateEmployeeLeave(EmployeeLeave employeeLeave)
         {
             _context.Add(employeeLeave);
-            return Save();
+            return await Save();
         }
 
-        public bool DeleteEmployeeLeave(EmployeeLeave employeeLeave)
+        public async Task<bool> DeleteEmployeeLeave(EmployeeLeave employeeLeave)
         {
             _context.Remove(employeeLeave);
-            return Save();
+            return await Save();
         }
 
-        public ICollection<EmployeeLeave> GetAllLeave()
+        public async Task<ICollection<EmployeeLeave>> GetAllLeave()
         {
-            return _context.EmployeeLeaves.OrderBy(el => el.Id).ToList();
+            return await _context.EmployeeLeaves.OrderBy(el => el.Id).ToListAsync();
         }
 
-        public EmployeeLeave GetLeave(int id)
+        public async Task<EmployeeLeave> GetLeave(int id)
         {
             return _context.EmployeeLeaves.Where(el => el.Id == id).FirstOrDefault();
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
-        public bool UpdateEmployeeLeave(EmployeeLeave employeeLeave)
+        public async Task<bool> UpdateEmployeeLeave(EmployeeLeave employeeLeave)
         {
             _context.Update(employeeLeave);
-            return Save();
+            return await Save();
         }
     }
 }

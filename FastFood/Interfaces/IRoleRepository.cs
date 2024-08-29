@@ -6,16 +6,16 @@ namespace FastFood.Interfaces
 {
     public interface IRoleRepository
     {
-        ICollection<Role> GetRoles();
-        Role GetRole(int id);
-        bool RoleExists(int id);
-        ICollection<Employee> GetEmployeesByRole(int roleId);
-        bool CreateRole(Role role);
+        Task<ICollection<Role>> GetRoles();
+        Task<Role> GetRole(int id);
+        Task<bool> RoleExists(int id);
+        Task<ICollection<Employee>> GetEmployeesByRole(int roleId);
+        Task<bool> CreateRole(Role role);
 
-        bool Save();
+        Task<bool> Save();
 
-        bool UpdateRole(Role role);
-        bool DeleteRole(Role role);
-        Role CheckDuplicateRole(RoleDto role);
+        Task<bool> UpdateRole(Role role);
+        Task<bool> DeleteRole(Role role);
+        Task<Role> CheckDuplicateRole(RoleDto role);
     }
 }

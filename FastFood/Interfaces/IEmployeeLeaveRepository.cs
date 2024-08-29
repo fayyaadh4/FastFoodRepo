@@ -4,11 +4,11 @@ namespace FastFood.Interfaces
 {
     public interface IEmployeeLeaveRepository
     {
-        ICollection<EmployeeLeave> GetAllLeave();
-        EmployeeLeave GetLeave(int id);
-        bool CreateEmployeeLeave(EmployeeLeave employeeLeave);
-        bool UpdateEmployeeLeave(EmployeeLeave employeeLeave);
-        bool DeleteEmployeeLeave(EmployeeLeave employeeLeave);
-        bool Save();
+        Task<ICollection<EmployeeLeave>> GetAllLeave();
+        Task<EmployeeLeave> GetLeave(int id);
+        Task<bool> CreateEmployeeLeave(EmployeeLeave employeeLeave);
+        Task<bool> UpdateEmployeeLeave(EmployeeLeave employeeLeave);
+        Task<bool> DeleteEmployeeLeave(EmployeeLeave employeeLeave);
+        Task<bool> Save();
     }
 }

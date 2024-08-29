@@ -5,15 +5,15 @@ namespace FastFood.Interfaces
 {
     public interface IMenuItemRepository
     {
-        ICollection<MenuItem> GetMenuItems();
-        MenuItem GetMenuItem(int id);
-        ICollection<MenuItem> GetMenuItemsByRestaurant(int restaurantId);
-        bool MenuItemExists (int id);
-        bool CreateMenuItem(MenuItem menuItem);
-        bool Save();
-        bool UpdateMenuItem(MenuItem menuItem);
-        bool DeleteMenuItem(MenuItem menuItem);
-        bool DeleteMenuItems(List<MenuItem> menuItems);
-        MenuItem CheckDuplicateMenuItem(MenuItemDto menuItem);
+        Task<ICollection<MenuItem>> GetMenuItems();
+        Task<MenuItem> GetMenuItem(int id);
+        Task<ICollection<MenuItem>> GetMenuItemsByRestaurant(int restaurantId);
+        Task<bool> MenuItemExists (int id);
+        Task<bool> CreateMenuItem(MenuItem menuItem);
+        Task<bool> Save();
+        Task<bool> UpdateMenuItem(MenuItem menuItem);
+        Task<bool> DeleteMenuItem(MenuItem menuItem);
+        Task<bool> DeleteMenuItems(List<MenuItem> menuItems);
+        Task<MenuItem> CheckDuplicateMenuItem(MenuItemDto menuItem);
     }
 }

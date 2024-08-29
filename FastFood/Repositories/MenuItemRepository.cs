@@ -18,64 +18,64 @@ namespace FastFood.Repositories
             _mapper = mapper;
         }
 
-        public MenuItem CheckDuplicateMenuItem(MenuItemDto menuItem)
+        public async Task<MenuItem> CheckDuplicateMenuItem(MenuItemDto menuItem)
         {
-            var menuItemExists =  GetMenuItems()
+            var menuItemExists =  (await GetMenuItems())
                 .Where(m => m.Name.Trim().ToUpper() == menuItem.Name.Trim().ToUpper())
                 .FirstOrDefault();
             return menuItemExists;
         }
 
-        public bool CreateMenuItem(MenuItem menuItem)
+        public async Task<bool> CreateMenuItem(MenuItem menuItem)
         {
             _context.Add(menuItem);
-            return Save();
+            return await Save();
         }
 
-        public bool DeleteMenuItem(MenuItem menuItem)
+        public async Task<bool> DeleteMenuItem(MenuItem menuItem)
         {
             _context.Remove(menuItem);
-            return Save();
+            return await Save();
         }
 
-        public bool DeleteMenuItems(List<MenuItem> menuItems)
+        public async Task<bool> DeleteMenuItems(List<MenuItem> menuItems)
         {
 
             _context.RemoveRange(menuItems);
-            return Save();
+            return await Save();
         }
 
-        public MenuItem GetMenuItem(int id)
+        public async Task<MenuItem> GetMenuItem(int id)
         {
             return _context.MenuItems.Where(m => m.Id == id).FirstOrDefault();
         }
 
-        public ICollection<MenuItem> GetMenuItems()
+        public async Task<ICollection<MenuItem>> GetMenuItems()
         {
-            return _context.MenuItems.ToList();
+            return await _context.MenuItems.ToListAsync();
         }
 
-        public ICollection<MenuItem> GetMenuItemsByRestaurant(int restaurantId)
+        public async Task<ICollection<MenuItem>> GetMenuItemsByRestaurant(int restaurantId)
         {
-            return _context.MenuItems.Where(m => m.RestaurantId == restaurantId).ToList();
+            return await _context.MenuItems.Where(m => m.RestaurantId == restaurantId).ToListAsync();
         }
 
-        public bool MenuItemExists(int id)
+        public async Task<bool> MenuItemExists(int id)
         {
             return _context.MenuItems.Any(m => m.Id == id);
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
 
         }
 
-        public bool UpdateMenuItem(MenuItem menuItem)
+        public async Task<bool> UpdateMenuItem(MenuItem menuItem)
         {
             _context.Update(menuItem);
-            return Save();
+            return await Save();
         }
     }
 }

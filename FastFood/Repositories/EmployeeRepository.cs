@@ -2,6 +2,7 @@
 using FastFood.Dto;
 using FastFood.Interfaces;
 using FastFood.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FastFood.Repositories
 {
@@ -14,64 +15,64 @@ namespace FastFood.Repositories
             _context = context;
             
         }
-        public Employee CheckDuplicateEmployee(EmployeeDto employee)
+        public async Task<Employee> CheckDuplicateEmployee(EmployeeDto employee)
         {
-            return GetEmployees()
+            return (await GetEmployees())
                 .Where(e => e.FirstName == employee.FirstName && e.LastName == employee.LastName)
                 .FirstOrDefault();
         }
 
-        public bool CreateEmployee(Employee employee)
+        public async Task<bool> CreateEmployee(Employee employee)
         {
             _context.Add(employee);
-            return Save();
+            return await Save();
         }
 
-        public bool DeleteEmployee(Employee employee)
+        public async Task<bool> DeleteEmployee(Employee employee)
         {
             _context.Remove(employee);
-            return Save();
+            return await Save();
         }
 
-        public bool EmployeeExists(int id)
+        public async Task<bool> EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.Id == id);
 
         }
 
-        public Employee GetEmployee(int id)
+        public async Task<Employee> GetEmployee(int id)
         {
             return _context.Employees.Where(e => e.Id == id).FirstOrDefault();
 
         }
 
-        public ICollection<Employee> GetEmployees()
+        public async Task<ICollection<Employee>> GetEmployees()
         {
-            return _context.Employees.OrderBy(e => e.LastName).ToList();
+            return await _context.Employees.OrderBy(e => e.LastName).ToListAsync();
 
         }
 
-        public ICollection<Employee> GetEmployeesByRestaurant(int restaurantId)
+        public async Task<ICollection<Employee>> GetEmployeesByRestaurant(int restaurantId)
         {
-            return _context.Employees.Where(e => e.RestaurantId == restaurantId).ToList();
+            return await _context.Employees.Where(e => e.RestaurantId == restaurantId).ToListAsync();
         }
 
-        public EmployeeLeave GetLeaveByEmployee(int employeeId)
+        public async Task<EmployeeLeave> GetLeaveByEmployee(int employeeId)
         {
             return _context.EmployeeLeaves.Where(m => m.EmployeeId == employeeId).FirstOrDefault();
 
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
-        public bool UpdateEmployee(Employee employee)
+        public async Task<bool> UpdateEmployee(Employee employee)
         {
             _context.Update(employee);
-            return Save();
+            return await Save();
         }
     }
 }
