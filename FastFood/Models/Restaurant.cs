@@ -11,6 +11,7 @@
         public bool HasDelivery { get; set; }
         public Location? Location { get; set; }
         public List<MenuItem>? MenuItems { get; set; }
+        public ICollection<Employee> Employees { get; set; }
 
     }
 }
