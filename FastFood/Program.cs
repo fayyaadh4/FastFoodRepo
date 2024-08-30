@@ -9,12 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;
 using FastFood.Startup;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // refactored program.cs file to make it look neater since there were alot of services registered in the dependency injection container
 // passed in the builder configuratio for use in registration of sql server database
-builder.Services.RegisterService(builder.Configuration);
+// passed in builder.host for the injection of IHostBuilder in DISetup
+builder.Services.RegisterService(builder.Host, builder.Configuration);
 
 var app = builder.Build();
 
@@ -34,6 +36,9 @@ void SeedData(IHost app)
 
 // refactored swagger configuration
 app.ConfigureSwagger();
+
+// used so serilog will log Http calls for all requests
+app.UseSerilogRequestLogging();
 
 app.MapIdentityApi<IdentityUser>();
 

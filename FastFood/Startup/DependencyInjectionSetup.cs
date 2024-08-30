@@ -3,13 +3,14 @@ using FastFood.Interfaces;
 using FastFood.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace FastFood.Startup
 {
     public static class DependencyInjectionSetup
     {
-        public static IServiceCollection RegisterService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterService(this IServiceCollection services, IHostBuilder hosts,  IConfiguration configuration)
         {
 
             // Add services to the container.
@@ -43,7 +44,20 @@ namespace FastFood.Startup
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
-
+            // register Serilog
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration).CreateLogger();
+            /*
+             Without writing to appsettings.json file
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                // logs/FastFood-.txt will write to file folder and dash will add date
+                .WriteTo.File("logs/FastFood-.txt", rollingInterval:RollingInterval.Day)
+                .CreateLogger();
+            */
+            // used so serilog will log all http requests
+            hosts.UseSerilog();
             // registers the db context  with the sql server database inside the dependency injection container
             services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

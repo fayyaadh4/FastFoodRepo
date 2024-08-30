@@ -6,6 +6,7 @@ using FastFood.Models;
 using FastFood.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace FastFood.Controllers
 {
@@ -36,6 +37,8 @@ namespace FastFood.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            Log.Information("Get Menu Items - Serilog => {@menuItems}", menuItems);
 
             return Ok(menuItems);
         }
