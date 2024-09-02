@@ -1,13 +1,6 @@
 using FastFood;
-using FastFood.Data;
-using FastFood.Filters;
-using FastFood.Interfaces;
 using FastFood.Middleware;
-using FastFood.Repositories;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.Filters;
-using System.Text.Json.Serialization;
 using FastFood.Startup;
 using Serilog;
 

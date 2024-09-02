@@ -5,7 +5,13 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFood", "FastFood\FastFood.csproj", "{FC817C44-D511-4D90-99CA-24B0C4720F1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFood.Test", "FastFood.Test\FastFood.Test.csproj", "{0766EF59-13B3-4219-A6BB-67F3CC3EFD87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFood.Test", "FastFood.Test\FastFood.Test.csproj", "{0766EF59-13B3-4219-A6BB-67F3CC3EFD87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFood.Repo", "FastFood.Repo\FastFood.Repo.csproj", "{A718EFA2-09F7-4B15-9B08-40A0714DB7F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFood.Domain", "FastFood.Domain\FastFood.Domain.csproj", "{4FB7FEB5-F6FD-435A-B682-8A2A37375909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFood.Application", "FastFood.Services\FastFood.Application.csproj", "{FD6DE378-A2BB-40B2-8642-E34BCBB0159B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{0766EF59-13B3-4219-A6BB-67F3CC3EFD87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0766EF59-13B3-4219-A6BB-67F3CC3EFD87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0766EF59-13B3-4219-A6BB-67F3CC3EFD87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A718EFA2-09F7-4B15-9B08-40A0714DB7F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A718EFA2-09F7-4B15-9B08-40A0714DB7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A718EFA2-09F7-4B15-9B08-40A0714DB7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A718EFA2-09F7-4B15-9B08-40A0714DB7F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FB7FEB5-F6FD-435A-B682-8A2A37375909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FB7FEB5-F6FD-435A-B682-8A2A37375909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FB7FEB5-F6FD-435A-B682-8A2A37375909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FB7FEB5-F6FD-435A-B682-8A2A37375909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD6DE378-A2BB-40B2-8642-E34BCBB0159B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD6DE378-A2BB-40B2-8642-E34BCBB0159B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD6DE378-A2BB-40B2-8642-E34BCBB0159B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD6DE378-A2BB-40B2-8642-E34BCBB0159B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

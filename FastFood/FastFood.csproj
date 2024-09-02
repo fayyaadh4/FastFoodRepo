@@ -26,7 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Service\" />
+    <ProjectReference Include="..\FastFood.Domain\FastFood.Domain.csproj" />
+    <ProjectReference Include="..\FastFood.Repo\FastFood.Repo.csproj" />
+    <ProjectReference Include="..\FastFood.Services\FastFood.Application.csproj" />
   </ItemGroup>
 
 </Project>

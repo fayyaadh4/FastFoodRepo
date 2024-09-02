@@ -1,8 +1,6 @@
-﻿using AutoMapper;
+﻿
+using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
-using FastFood.Interfaces;
-using FastFood.Models;
-using FastFood.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastFood.Controllers
@@ -11,60 +9,41 @@ namespace FastFood.Controllers
     [ApiController]
     public class RoleController : Controller
     {
-        private readonly RoleRepository _roleRepository;
-        private readonly IMapper _mapper;
+        private readonly IRoleService _roleService;
 
-        public RoleController(
-            RoleRepository roleRepository,
-            IMapper mapper
-            )
+        public RoleController(IRoleService roleService)
         {
-            _roleRepository = roleRepository;
-            _mapper = mapper;
+            _roleService = roleService;
         }
 
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(Role))]
+        [ProducesResponseType(200, Type = typeof(RoleDto))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetRestaurant(int id)
+        public async Task<IActionResult> GetRole(int id)
         {
-            if (!await _roleRepository.RoleExists(id))
-                return NotFound("Role does not exist");
+            var role = await _roleService.GetRole(id);
 
-            var role = _mapper.Map<RoleDto>(await _roleRepository.GetRole(id));
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
 
             return Ok(role);
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Role>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<RoleDto>))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetRestaurants()
+        public async Task<IActionResult> GetRoles()
         {
-            var roles = _mapper.Map<List<RoleDto>>(await _roleRepository.GetRoles());
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var roles = await _roleService.GetRoles();
 
             return Ok(roles);
         }
 
         [HttpGet("empployees/{roleId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Employee>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<EmployeeDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEmployeesByRole(int roleId)
         {
-            if (!await _roleRepository.RoleExists(roleId))
-                return NotFound("Role does not exist");
-
-            var employees = _mapper.Map<List<EmployeeDto>>(await _roleRepository.GetEmployeesByRole(roleId));
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var employees = await _roleService.GetEmployeesByRole(roleId);
 
             return Ok(employees);
         }
@@ -74,27 +53,7 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateRole([FromBody] RoleDto createRole)
         {
-            if (createRole == null)
-                return BadRequest(ModelState);
-
-            var roleExists = await _roleRepository.CheckDuplicateRole(createRole);
-
-            if (roleExists != null)
-            {
-                ModelState.AddModelError("", "Role already exists");
-                return StatusCode(422, ModelState);
-            }
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var roleMap = _mapper.Map<Role>(createRole);
-
-            if (!await _roleRepository.CreateRole(roleMap))
-            {
-                ModelState.AddModelError("", "Issue creating role");
-                return StatusCode(422, ModelState);
-            }
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            await _roleService.CreateRole(createRole);
             return Ok("Role successfully created");
         }
 
@@ -105,25 +64,7 @@ namespace FastFood.Controllers
         public async Task<IActionResult> UpdateRole(int roleId,
              [FromBody] RoleDto updateRole)
         {
-            if (updateRole == null)
-                return BadRequest(ModelState);
-
-            if (roleId != updateRole.Id)
-                return BadRequest(ModelState);
-
-            if (!await _roleRepository.RoleExists(roleId))
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var roleMap = _mapper.Map<Role>(updateRole);
-
-            if (!await _roleRepository.UpdateRole(roleMap))
-            {
-                ModelState.AddModelError("", "Something went wrong while updating the role");
-                return StatusCode(500, ModelState);
-            }
-
+            await _roleService.UpdateRole(roleId, updateRole);
             return NoContent();
         }
 
@@ -133,20 +74,7 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteRole(int roleId)
         {
-            if (!await _roleRepository.RoleExists(roleId))
-                return NotFound();
-
-            var roleToDelete = await _roleRepository.GetRole(roleId);
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (!await _roleRepository.DeleteRole(roleToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong deleting role");
-                return StatusCode(500, ModelState);
-            }
-
+            await _roleService.DeleteRole(roleId);
             return NoContent();
 
 

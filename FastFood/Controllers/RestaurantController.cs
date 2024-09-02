@@ -1,8 +1,6 @@
 ﻿
-using AutoMapper;
+using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
-using FastFood.Interfaces;
-using FastFood.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastFood.Controllers
@@ -11,25 +9,24 @@ namespace FastFood.Controllers
     [ApiController]
     public class RestaurantController : Controller
     {
-        private readonly IRestaurantRepository _restaurantRepository;
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IMapper _mapper;
+        private readonly IRestaurantService _restaurantService;
 
-        public RestaurantController(IRestaurantRepository restaurantRepository, 
-            IMenuItemRepository menuItemRepository,
-            IMapper mapper)
+        public RestaurantController(IRestaurantService restaurantService)
         {
-            _restaurantRepository = restaurantRepository;
-            _menuItemRepository = menuItemRepository;
-            _mapper = mapper;
+            _restaurantService = restaurantService;
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(Restaurant))]
+        [ProducesResponseType(200, Type = typeof(RestaurantDto))]
         [ProducesResponseType(400)]
+        // will cache for 60s
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetRestaurant(int id)
         {
-            if (!(await _restaurantRepository.RestaurantExists(id)))
+            var restaurant = await _restaurantService.GetRestaurant(id);
+
+            return Ok(restaurant);
+            /*if (!(await _restaurantRepository.RestaurantExists(id)))
                 return NotFound("Restaurant does not exist");
 
             var restaurant = _mapper.Map<Restaurant>(await _restaurantRepository.GetRestaurant(id));
@@ -37,28 +34,34 @@ namespace FastFood.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(restaurant);
+            return Ok(restaurant);*/
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Restaurant>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<RestaurantDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetRestaurants()
         {
-            var restaurants = _mapper.Map<List<Restaurant>>(await _restaurantRepository.GetRestaurants());
+            var restaurants = await _restaurantService.GetRestaurants();
+
+            return Ok(restaurants);
+            /* var restaurants = _mapper.Map<List<Restaurant>>(await _restaurantRepository.GetRestaurants());
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(restaurants);
+            return Ok(restaurants); */
         }
 
         [HttpGet("menuItem/{restaurantId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Restaurant>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<MenuItemDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetMenuItemsByRestaurant(int restaurantId)
         {
-            if (!await _restaurantRepository.RestaurantExists(restaurantId))
+            var menuItems = await _restaurantService.GetMenuItemsByRestaurant(restaurantId);
+
+            return Ok(menuItems);
+            /* if (!await _restaurantRepository.RestaurantExists(restaurantId))
                 return NotFound("Restaurant does not exist");
 
             var menuItems = _mapper.Map<List<MenuItem>>(await _restaurantRepository.GetMenuItemsByRestaurant(restaurantId));
@@ -66,7 +69,7 @@ namespace FastFood.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(menuItems);
+            return Ok(menuItems); */
         }
 
         [HttpPost]
@@ -74,7 +77,10 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantDto createRestaurant)
         {
-            if (createRestaurant == null)
+            var restaurantCreated = await _restaurantService.CreateRestaurant(createRestaurant);
+            return Ok("Restaurant successfully created");
+
+            /* if (createRestaurant == null)
                 return BadRequest(ModelState);
 
             var restaurantExists = await _restaurantRepository.CheckDuplicateRestaurant(createRestaurant);
@@ -96,7 +102,7 @@ namespace FastFood.Controllers
             }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok("Restaurant successfully created");
+            return Ok("Restaurant successfully created"); */
         }
 
         [HttpPut("{restaurantId}")]
@@ -106,7 +112,10 @@ namespace FastFood.Controllers
         public async Task<IActionResult> UpdateRestaurant(int restaurantId,
              [FromBody] RestaurantDto updateRestaurant)
         {
-            if (updateRestaurant == null)
+
+            await _restaurantService.UpdateRestaurant(restaurantId, updateRestaurant);
+            return NoContent();
+            /* if (updateRestaurant == null)
                 return BadRequest(ModelState);
 
             if (restaurantId != updateRestaurant.Id)
@@ -126,7 +135,7 @@ namespace FastFood.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return NoContent();
+            return NoContent(); */
         }
 
         [HttpDelete("{restaurantId}")]
@@ -135,7 +144,9 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteRestaurant(int restaurantId)
         {
-            if (!await _restaurantRepository.RestaurantExists(restaurantId))
+            await _restaurantService.DeleteRestaurant(restaurantId);
+            return NoContent();
+            /* if (!await _restaurantRepository.RestaurantExists(restaurantId))
                 return NotFound();
 
             var menuItemsToDelete = await _menuItemRepository.GetMenuItemsByRestaurant(restaurantId);
@@ -157,7 +168,7 @@ namespace FastFood.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return NoContent();
+            return NoContent();*/
 
 
         }

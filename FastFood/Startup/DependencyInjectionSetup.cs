@@ -1,6 +1,9 @@
-﻿using FastFood.Data;
-using FastFood.Interfaces;
-using FastFood.Repositories;
+﻿
+using FastFood.Application.Services;
+using FastFood.Domain.Interfaces;
+using FastFood.Domain.ServiceInterfaces;
+using FastFood.Repo.Data;
+using FastFood.Repo.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -28,6 +31,14 @@ namespace FastFood.Startup
             services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+
+            // register services in Dependency injection container
+            services.AddScoped<IMenuItemService, MenuItemService>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
+            services.AddScoped<IEmployeeLeaveService, EmployeeLeaveService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IRoleService, RoleService>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             // used to register the Identity Authorization into the services collection
