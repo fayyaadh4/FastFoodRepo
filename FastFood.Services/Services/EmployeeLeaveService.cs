@@ -3,9 +3,6 @@ using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastFood.Application.Services
 {
@@ -16,11 +13,21 @@ namespace FastFood.Application.Services
             _employeeLeaveRepository = employeeLeaveRepository;
         }
 
+        public Task<bool> CalculateCurrentLeave(EmployeeLeaveDto employeeLeave)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CalculateLeaveAccruedPerMonth(EmployeeLeaveDto employeeLeave)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<EmployeeLeaveDto> GetLeaveByEmployee(int employeeId)
         {
             var response = new EmployeeLeaveDto();
 
-            _employeeLeaveRepository.GetLeave(employeeId);
+            await _employeeLeaveRepository.GetLeave(employeeId);
 
 
             return response;

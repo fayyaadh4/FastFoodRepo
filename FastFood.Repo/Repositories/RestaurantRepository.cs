@@ -32,9 +32,9 @@ namespace FastFood.Repo.Repositories
             return await _context.MenuItems.Where(m => m.RestaurantId == restaurantId).ToListAsync();
         }
 
-        public async Task<Restaurant> GetRestaurant(int id)
+        public async Task<Restaurant?> GetRestaurant(int id)
         {
-            return _context.Restaurants.Where(r => r.Id == id).FirstOrDefault();
+            return await _context.Restaurants.Where(r => r.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<Restaurant>> GetRestaurants()
@@ -44,13 +44,13 @@ namespace FastFood.Repo.Repositories
 
         public async Task<bool> RestaurantExists(int id)
         {
-            return _context.Restaurants.Any(r => r.Id == id);
+            return await _context.Restaurants.AnyAsync(r => r.Id == id);
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
 
         public async Task<bool> UpdateRestaurant(Restaurant restaurant)

@@ -30,13 +30,13 @@ namespace FastFood.Repo.Repositories
 
         public async Task<bool> EmployeeExists(int id)
         {
-            return _context.Employees.Any(e => e.Id == id);
+            return await _context.Employees.AnyAsync(e => e.Id == id);
 
         }
 
-        public async Task<Employee> GetEmployee(int id)
+        public async Task<Employee?> GetEmployee(int id)
         {
-            return _context.Employees.Where(e => e.Id == id).FirstOrDefault();
+            return await _context.Employees.Where(e => e.Id == id).FirstOrDefaultAsync();
 
         }
 
@@ -51,15 +51,15 @@ namespace FastFood.Repo.Repositories
             return await _context.Employees.Where(e => e.RestaurantId == restaurantId).ToListAsync();
         }
 
-        public async Task<EmployeeLeave> GetLeaveByEmployee(int employeeId)
+        public async Task<EmployeeLeave?> GetLeaveByEmployee(int employeeId)
         {
-            return _context.EmployeeLeaves.Where(m => m.EmployeeId == employeeId).FirstOrDefault();
+            return await _context.EmployeeLeaves.Where(m => m.EmployeeId == employeeId).FirstOrDefaultAsync();
 
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
+            var saved = await _context.SaveChangesAsync();
             return saved > 0 ? true : false;
         }
 

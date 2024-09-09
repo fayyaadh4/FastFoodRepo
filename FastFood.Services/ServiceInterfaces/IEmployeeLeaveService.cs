@@ -11,6 +11,8 @@ namespace FastFood.Domain.ServiceInterfaces
     public interface IEmployeeLeaveService
     {
         Task<EmployeeLeaveDto> GetLeaveByEmployee(int employeeId);
+        Task<bool> CalculateLeaveAccruedPerMonth(EmployeeLeaveDto employeeLeave);
+        Task<bool> CalculateCurrentLeave(EmployeeLeaveDto employeeLeave);
 
     }
 }

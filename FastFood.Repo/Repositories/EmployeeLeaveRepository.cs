@@ -31,15 +31,15 @@ namespace FastFood.Repo.Repositories
             return await _context.EmployeeLeaves.OrderBy(el => el.Id).ToListAsync();
         }
 
-        public async Task<EmployeeLeave> GetLeave(int id)
+        public async Task<EmployeeLeave?> GetLeave(int id)
         {
-            return _context.EmployeeLeaves.Where(el => el.Id == id).FirstOrDefault();
+            return await _context.EmployeeLeaves.Where(el => el.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
 
         public async Task<bool> UpdateEmployeeLeave(EmployeeLeave employeeLeave)

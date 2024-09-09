@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using FastFood.Dto;
 using FastFood.Domain.Entities;
+using FastFood.Dto;
 
 namespace FastFood.Helper
 {

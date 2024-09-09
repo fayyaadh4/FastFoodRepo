@@ -33,9 +33,9 @@ namespace FastFood.Repo.Repositories
 
         }
 
-        public async Task<Role> GetRole(int id)
+        public async Task<Role?> GetRole(int id)
         {
-            return _context.Roles.Where(r => r.Id == id).FirstOrDefault();
+            return await _context.Roles.Where(r => r.Id == id).FirstOrDefaultAsync();
         }
 
 
@@ -46,13 +46,13 @@ namespace FastFood.Repo.Repositories
 
         public async Task<bool> RoleExists(int id)
         {
-            return _context.Roles.Any(r => r.Id == id);
+            return await _context.Roles.AnyAsync(r => r.Id == id);
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
 
         public async Task<bool> UpdateRole(Role role)

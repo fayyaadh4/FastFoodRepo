@@ -5,9 +5,6 @@ using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastFood.Application.Services
 {
@@ -71,7 +68,7 @@ namespace FastFood.Application.Services
             return employees;
         }
 
-        public async Task<ICollection<EmployeeDto>> GetEmployeesByRestaurant(int restaurantId)
+        public Task<ICollection<EmployeeDto>> GetEmployeesByRestaurant(int restaurantId)
         {
             throw new NotImplementedException();
         }
