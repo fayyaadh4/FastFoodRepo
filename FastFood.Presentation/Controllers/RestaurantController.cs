@@ -64,6 +64,7 @@ namespace FastFood.Controllers
         public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantDto createRestaurant)
         {
             var command = new CreateRestaurantCommand(createRestaurant);
+
             var result = await _mediatr.Send(command);
 
             return result ? Ok("Restaurant successfully created") : BadRequest() ;
