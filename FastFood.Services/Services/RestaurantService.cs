@@ -67,7 +67,7 @@ namespace FastFood.Application.Services
             return menuItems;
         }
 
-        public async Task<RestaurantDto> GetRestaurant(int id)
+        public async Task<RestaurantDto?> GetRestaurant(int id)
         {
             var restaurant = _mapper.Map<RestaurantDto>(await _restaurantRepository.GetRestaurant(id));
 
@@ -101,7 +101,7 @@ namespace FastFood.Application.Services
 
         }
 
-        public async Task<RestaurantDto> CheckDuplicateRestaurant(RestaurantDto restaurant)
+        public async Task<RestaurantDto?> CheckDuplicateRestaurant(RestaurantDto restaurant)
         {
             return (await GetRestaurants())
                 .Where(r => r.Name == restaurant.Name)

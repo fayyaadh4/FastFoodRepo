@@ -6,6 +6,9 @@ using FastFood.Repo.Data;
 using FastFood.Repo.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -13,7 +16,9 @@ namespace FastFood.Startup
 {
     public static class DependencyInjectionSetup
     {
-        public static IServiceCollection RegisterService(this IServiceCollection services, IHostBuilder hosts,  IConfiguration configuration)
+        public static IServiceCollection RegisterService(this IServiceCollection services, 
+            IHostBuilder hosts,  
+            IConfiguration configuration)
         {
 
             // Add services to the container.
@@ -30,7 +35,7 @@ namespace FastFood.Startup
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IEmployeeRoleRepository, RoleRepository>();
 
             // register services in Dependency injection container
             services.AddScoped<IMenuItemService, MenuItemService>();

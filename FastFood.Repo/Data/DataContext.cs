@@ -14,7 +14,7 @@ namespace FastFood.Repo.Data
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<Role> Roles {  get; set; }
+        public DbSet<EmployeeRole> EmployeeRoles {  get; set; }
         public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace FastFood.Repo.Data
 
             // one to many
             // one role can have many employees
-            modelBuilder.Entity<Role>()
+            modelBuilder.Entity<EmployeeRole>()
                 .HasMany(e => e.Employees)
                 .WithOne()
                 .HasForeignKey(e => e.RoleId);

@@ -18,7 +18,7 @@ namespace FastFood.Controllers
 
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(RoleDto))]
+        [ProducesResponseType(200, Type = typeof(EmployeeRoleDto))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetRole(int id)
         {
@@ -29,7 +29,7 @@ namespace FastFood.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<RoleDto>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<EmployeeRoleDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetRoles()
         {
@@ -51,7 +51,7 @@ namespace FastFood.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateRole([FromBody] RoleDto createRole)
+        public async Task<IActionResult> CreateRole([FromBody] EmployeeRoleDto createRole)
         {
             await _roleService.CreateRole(createRole);
             return Ok("Role successfully created");
@@ -62,7 +62,7 @@ namespace FastFood.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateRole(int roleId,
-             [FromBody] RoleDto updateRole)
+             [FromBody] EmployeeRoleDto updateRole)
         {
             await _roleService.UpdateRole(roleId, updateRole);
             return NoContent();

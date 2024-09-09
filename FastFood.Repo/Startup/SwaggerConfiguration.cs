@@ -1,4 +1,7 @@
-﻿namespace FastFood.Startup
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
+
+namespace FastFood.Startup
 {
     public static class SwaggerConfiguration
     {

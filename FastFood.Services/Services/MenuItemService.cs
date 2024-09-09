@@ -56,7 +56,7 @@ namespace FastFood.Application.Services
 
         }
 
-        public async Task<MenuItemDto> GetMenuItem(int id)
+        public async Task<MenuItemDto?> GetMenuItem(int id)
         {
             if (!await _menuItemRepository.MenuItemExists(id))
                 throw new Exception("Menu item not found");
@@ -67,7 +67,7 @@ namespace FastFood.Application.Services
             return menuItem;
         }
 
-        public async Task<ICollection<MenuItemDto>> GetMenuItems()
+        public async Task<ICollection<MenuItemDto?>> GetMenuItems()
     {
         var menuItems = _mapper.Map<List<MenuItemDto>>(await _menuItemRepository.GetMenuItems());
 
@@ -92,7 +92,7 @@ namespace FastFood.Application.Services
             return await _menuItemRepository.UpdateMenuItem(menuItemMap);
         }
 
-        public async Task<MenuItemDto> CheckDuplicateMenuItem(MenuItemDto menuItem)
+        public async Task<MenuItemDto?> CheckDuplicateMenuItem(MenuItemDto menuItem)
         {
             var menuItemExists = (await GetMenuItems())
                 .Where(m => m.Name.Trim().ToUpper() == menuItem.Name.Trim().ToUpper())

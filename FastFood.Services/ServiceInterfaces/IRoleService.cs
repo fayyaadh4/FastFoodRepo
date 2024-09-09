@@ -6,12 +6,12 @@ namespace FastFood.Domain.ServiceInterfaces
 {
     public interface IRoleService
     {
-        Task<ICollection<RoleDto>> GetRoles();
-        Task<RoleDto> GetRole(int id);
+        Task<ICollection<EmployeeRoleDto>> GetRoles();
+        Task<EmployeeRoleDto> GetRole(int id);
         Task<ICollection<EmployeeDto>> GetEmployeesByRole(int roleId);
-        Task<bool> CreateRole(RoleDto role);
-        Task<bool> UpdateRole(int roleId, RoleDto role);
+        Task<bool> CreateRole(EmployeeRoleDto role);
+        Task<bool> UpdateRole(int roleId, EmployeeRoleDto role);
         Task<bool> DeleteRole(int roleId);
-        Task<RoleDto> CheckDuplicateRole(RoleDto role);
+        Task<EmployeeRoleDto?> CheckDuplicateRole(EmployeeRoleDto role);
     }
 }

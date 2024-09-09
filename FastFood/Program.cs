@@ -1,7 +1,7 @@
 using FastFood;
 using FastFood.Middleware;
-using Microsoft.AspNetCore.Identity;
 using FastFood.Startup;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

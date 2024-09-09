@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FakeItEasy;
+using FastFood.Application.Services;
 using FastFood.Controllers;
+using FastFood.Domain.Entities;
+using FastFood.Domain.Interfaces;
+using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
-using FastFood.Interfaces;
-using FastFood.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,31 +14,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastFood.Test.Controller
+namespace FastFood.Test.Services
 {
-    public class RestaurantControllerTests
+    public class RestaurantServiceTests
     {
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IRestaurantService _restaurantService;
         private readonly IMapper _mapper;
 
         // real repositories not brought in as we're faking them
-        public RestaurantControllerTests()
+        public RestaurantServiceTests()
         {
             _menuItemRepository = A.Fake<IMenuItemRepository>();
             _restaurantRepository = A.Fake<IRestaurantRepository>();
+            _restaurantService = A.Fake<IRestaurantService>();
             _mapper = A.Fake<IMapper>();
         }
 
         [Fact]
-        public async Task RestaurantController_GetRestaurants_ReturnsOk()
+        public async Task RestaurantService_GetRestaurants_ReturnsRestaurants()
         {
             // Arrange: Get variables, functions, etc.
             var restaurantsRepo = A.Fake<ICollection<RestaurantDto>>();
             var restaurants = A.Fake<List<Restaurant>>();
             A.CallTo(() => _mapper.Map<List<Restaurant>>(restaurantsRepo))
                 .Returns(restaurants);
-            var controller = new RestaurantController
+            var controller = new RestaurantService
                 (
                     _restaurantRepository,
                     _menuItemRepository,
@@ -48,11 +52,10 @@ namespace FastFood.Test.Controller
 
             // Assert: What outcome is expected
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
-        public async Task RestaurantController_GetRestaurant_ReturnsOk()
+        public async Task RestaurantService_GetRestaurant_ReturnsRestaurant()
         {
             // Arrange
             var id = 1;
@@ -62,7 +65,7 @@ namespace FastFood.Test.Controller
                 .Returns(true);
             A.CallTo(() => _mapper.Map<RestaurantDto>(restaurantRepo))
                 .Returns(restaurant);
-            var controller = new RestaurantController
+            var controller = new RestaurantService
                 (
                     _restaurantRepository,
                     _menuItemRepository,
@@ -74,13 +77,12 @@ namespace FastFood.Test.Controller
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(OkObjectResult));
 
 
         }
 
         [Fact]
-        public async Task RestaurantController_GetMenuItemsByRestaurant_ReturnsOk()
+        public async Task RestaurantService_GetMenuItemsByRestaurant_ReturnsMenuItems()
         {
             // Arrange
             var id = 1;
@@ -93,7 +95,7 @@ namespace FastFood.Test.Controller
             A.CallTo(() => _restaurantRepository.GetMenuItemsByRestaurant(id))
                 .Returns(menuItems);
 
-            var controller = new RestaurantController
+            var controller = new RestaurantService
                 (
                     _restaurantRepository,
                     _menuItemRepository,
@@ -105,26 +107,25 @@ namespace FastFood.Test.Controller
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(OkObjectResult));
 
 
         }
 
         [Fact]
-        public async Task RestaurantController_CreateRestaurant_ReturnsOk()
+        public async Task RestaurantService_CreateRestaurant_ReturnsTrue()
         {
             // arrange
             var createRestaurant = A.Fake<RestaurantDto>();
             // var restaurantExists = null;
             var restaurantMap = A.Fake<Restaurant>();
-            Restaurant nullRestaurant = null;
-            A.CallTo(() => _restaurantRepository.CheckDuplicateRestaurant(createRestaurant))
+            RestaurantDto nullRestaurant = null;
+            A.CallTo(() => _restaurantService.CheckDuplicateRestaurant(createRestaurant))
             .Returns(nullRestaurant);
             A.CallTo(() => _mapper.Map<Restaurant>(createRestaurant))
             .Returns(restaurantMap);
             A.CallTo(() => _restaurantRepository.CreateRestaurant(restaurantMap))
             .Returns(true);
-            var controller = new RestaurantController
+            var controller = new RestaurantService
                 (
                     _restaurantRepository,
                     _menuItemRepository,
@@ -135,13 +136,12 @@ namespace FastFood.Test.Controller
             var result = await controller.CreateRestaurant(createRestaurant);
 
             //assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(OkObjectResult));
+            result.Should().BeTrue();
 
         }
 
         [Fact]
-        public async Task RestaurantController_UpdateRestaurant_ReturnsOk()
+        public async Task RestaurantService_UpdateRestaurant_ReturnsTrue()
         {
             // arrange
             var id = 1;
@@ -154,7 +154,7 @@ namespace FastFood.Test.Controller
                 .Returns(restaurantMap);
             A.CallTo(() => _restaurantRepository.UpdateRestaurant(restaurantMap))
                 .Returns(true);
-            var controller = new RestaurantController
+            var controller = new RestaurantService
                 (
                     _restaurantRepository,
                     _menuItemRepository,
@@ -165,14 +165,13 @@ namespace FastFood.Test.Controller
             var result = await controller.UpdateRestaurant(id, restaurantUpdate);
 
             //asert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(NoContentResult));
+            result.Should().BeTrue();
 
         }
 
 
         [Fact]
-        public async Task RestaurantController_DeleteRestaurant_ReturnsOk()
+        public async Task RestaurantService_DeleteRestaurant_ReturnsTrue()
         {
             // arrange
             var id = 1;
@@ -189,7 +188,7 @@ namespace FastFood.Test.Controller
                 .Returns(true);
             A.CallTo(() => _restaurantRepository.DeleteRestaurant(restaurantToDelete))
                 .Returns(true);
-            var controller = new RestaurantController
+            var controller = new RestaurantService
                 (
                     _restaurantRepository,
                     _menuItemRepository,
@@ -200,8 +199,7 @@ namespace FastFood.Test.Controller
             var result = await controller.DeleteRestaurant(id);
 
             //asert
-            result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(NoContentResult));
+            result.Should().BeTrue();
 
         }
     }

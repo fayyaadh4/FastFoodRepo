@@ -5,7 +5,7 @@ using FastFood.Repo.Data;
 
 namespace FastFood.Repo.Repositories
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : IEmployeeRoleRepository
     {
         private readonly DataContext _context;
 
@@ -15,15 +15,15 @@ namespace FastFood.Repo.Repositories
         }
 
 
-        public async Task<bool> CreateRole(Role role)
+        public async Task<bool> CreateRole(EmployeeRole empRole)
         {
-            _context.Add(role);
+            _context.Add(empRole);
             return await Save();
         }
 
-        public async Task<bool> DeleteRole(Role role)
+        public async Task<bool> DeleteRole(EmployeeRole empRole)
         {
-            _context.Remove(role);
+            _context.Remove(empRole);
             return await Save();
         }
 
@@ -33,20 +33,20 @@ namespace FastFood.Repo.Repositories
 
         }
 
-        public async Task<Role?> GetRole(int id)
+        public async Task<EmployeeRole?> GetRole(int id)
         {
-            return await _context.Roles.Where(r => r.Id == id).FirstOrDefaultAsync();
+            return await _context.EmployeeRoles.Where(r => r.Id == id).FirstOrDefaultAsync();
         }
 
 
-        public async Task<ICollection<Role>> GetRoles()
+        public async Task<ICollection<EmployeeRole>> GetRoles()
         {
-            return await _context.Roles.OrderBy(r => r.Name).ToListAsync();
+            return await _context.EmployeeRoles.OrderBy(r => r.Name).ToListAsync();
         }
 
         public async Task<bool> RoleExists(int id)
         {
-            return await _context.Roles.AnyAsync(r => r.Id == id);
+            return await _context.EmployeeRoles.AnyAsync(r => r.Id == id);
         }
 
         public async Task<bool> Save()
@@ -55,9 +55,9 @@ namespace FastFood.Repo.Repositories
             return saved > 0;
         }
 
-        public async Task<bool> UpdateRole(Role role)
+        public async Task<bool> UpdateRole(EmployeeRole empRole)
         {
-            _context.Update(role);
+            _context.Update(empRole);
             return await Save();
         }
     }

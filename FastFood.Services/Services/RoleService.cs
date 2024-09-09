@@ -8,15 +8,15 @@ namespace FastFood.Application.Services
 {
     public class RoleService : IRoleService
     {
-        private readonly IRoleRepository _roleRepository;
+        private readonly IEmployeeRoleRepository _roleRepository;
         private readonly IMapper _mapper;
 
-        public RoleService(IRoleRepository roleRepository, IMapper mapper)
+        public RoleService(IEmployeeRoleRepository roleRepository, IMapper mapper)
         {
             _roleRepository = roleRepository;
             _mapper = mapper;
         }
-        public async Task<bool> CreateRole(RoleDto role)
+        public async Task<bool> CreateRole(EmployeeRoleDto role)
         {
             if (role == null)
                 throw new Exception("Body cannot be null");
@@ -28,7 +28,7 @@ namespace FastFood.Application.Services
                 throw new Exception("Role already exists");
             }
 
-            var roleMap = _mapper.Map<Role>(role);
+            var roleMap = _mapper.Map<EmployeeRole>(role);
 
             return await _roleRepository.CreateRole(roleMap);
         }
@@ -56,43 +56,43 @@ namespace FastFood.Application.Services
             return employees;
         }
 
-        public async Task<RoleDto> GetRole(int id)
+        public async Task<EmployeeRoleDto> GetRole(int id)
         {
             if (!await _roleRepository.RoleExists(id))
                 throw new Exception("Role not found");
 
-            var role = _mapper.Map<RoleDto>(await _roleRepository.GetRole(id));
+            var role = _mapper.Map<EmployeeRoleDto>(await _roleRepository.GetRole(id));
 
 
             return role;
         }
 
-        public async Task<ICollection<RoleDto>> GetRoles()
+        public async Task<ICollection<EmployeeRoleDto>> GetRoles()
         {
-            var roles = _mapper.Map<List<RoleDto>>(await _roleRepository.GetRoles());
+            var roles = _mapper.Map<List<EmployeeRoleDto>>(await _roleRepository.GetRoles());
 
 
             return roles;
         }
 
-        public async Task<bool> UpdateRole(int roleId, RoleDto role)
+        public async Task<bool> UpdateRole(int empRoleId, EmployeeRoleDto empRole)
         {
-            if (role == null)
+            if (empRole == null)
                 throw new Exception("Body cannot be null");
 
-            if (roleId != role.Id)
+            if (empRoleId != empRole.Id)
                 throw new Exception("ID mismatch");
 
-            if (!await _roleRepository.RoleExists(roleId))
+            if (!await _roleRepository.RoleExists(empRoleId))
                 throw new Exception("Role already exists");
 
-            var roleMap = _mapper.Map<Role>(role);
+            var roleMap = _mapper.Map<EmployeeRole>(empRole);
 
 
             return await _roleRepository.UpdateRole(roleMap);
         }
 
-        public async Task<RoleDto> CheckDuplicateRole(RoleDto role)
+        public async Task<EmployeeRoleDto?> CheckDuplicateRole(EmployeeRoleDto role)
         {
             return (await GetRoles())
                 .Where(r => r.Name == role.Name)

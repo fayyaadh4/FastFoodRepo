@@ -31,11 +31,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
     <PackageReference Include="xunit" Version="2.9.0" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\FastFood.Domain\FastFood.Domain.csproj" />
-    <ProjectReference Include="..\FastFood.Repo\FastFood.Repo.csproj" />
-    <ProjectReference Include="..\FastFood.Services\FastFood.Application.csproj" />
+    <ProjectReference Include="..\FastFood.Repo\FastFood.Infrastructure.csproj" />
+    <ProjectReference Include="..\FastFood.Services\FastFood.Core.csproj" />
   </ItemGroup>
 
 </Project>

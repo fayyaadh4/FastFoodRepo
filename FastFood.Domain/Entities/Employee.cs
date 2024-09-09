@@ -12,7 +12,7 @@
         public Location? Location { get; set; } 
         public DateOnly? DateOfBirth { get; set; }
         public int RoleId { get; set; }
-        public Role? Role { get; set; }
+        public EmployeeRole? EmployeeRole { get; set; }
         public EmployeeLeave? EmployeeLeave { get; set; }
         public int RestaurantId { get; set; }
         public Restaurant? Restaurant { get; set; }

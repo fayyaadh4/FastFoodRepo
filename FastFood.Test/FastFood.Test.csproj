@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -25,7 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FastFood\FastFood.csproj" />
+    <ProjectReference Include="..\FastFood.Domain\FastFood.Domain.csproj" />
+    <ProjectReference Include="..\FastFood.Repo\FastFood.Infrastructure.csproj" />
+    <ProjectReference Include="..\FastFood.Services\FastFood.Core.csproj" />
+    <ProjectReference Include="..\FastFood\FastFood.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

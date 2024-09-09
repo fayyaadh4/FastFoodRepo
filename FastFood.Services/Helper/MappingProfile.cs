@@ -16,7 +16,7 @@ namespace FastFood.Helper
                 .ReverseMap();
             CreateMap<Employee, EmployeeDto>()
                 .ReverseMap();
-            CreateMap<Role, RoleDto>()
+            CreateMap<EmployeeRole, EmployeeRoleDto>()
                 .ReverseMap();
         }
     }
