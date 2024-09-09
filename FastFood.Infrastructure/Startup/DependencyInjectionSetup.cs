@@ -1,5 +1,6 @@
 ﻿
 using FastFood.Application.Services;
+using FastFood.Core.Services;
 using FastFood.Domain.Interfaces;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Repo.Data;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 namespace FastFood.Startup
 {
@@ -20,7 +22,6 @@ namespace FastFood.Startup
             IHostBuilder hosts,  
             IConfiguration configuration)
         {
-
             // Add services to the container.
 
             services.AddControllers();
@@ -83,6 +84,12 @@ namespace FastFood.Startup
             // registers the datacontext with the IdentityUser
             services.AddIdentityApiEndpoints<IdentityUser>()
                 .AddEntityFrameworkStores<DataContext>();
+
+            // Injecting the MediatR to our DI container by telling it  to scan all assemblies in Program.cs
+            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DependencyInjectionSetup).Assembly));
+
+            services.AddApplicationServices();
+            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DependencyInjectionSetup).Assembly));
 
             return services;
         }

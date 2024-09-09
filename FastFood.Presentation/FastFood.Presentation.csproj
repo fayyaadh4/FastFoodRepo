@@ -6,15 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Dto\**" />
-    <Content Remove="Dto\**" />
-    <EmbeddedResource Remove="Dto\**" />
-    <None Remove="Dto\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
@@ -33,8 +28,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\FastFood.Repo\FastFood.Infrastructure.csproj" />
-    <ProjectReference Include="..\FastFood.Services\FastFood.Core.csproj" />
+    <ProjectReference Include="..\FastFood.Infrastructure\FastFood.Infrastructure.csproj" />
+    <ProjectReference Include="..\FastFood.Core\FastFood.Core.csproj" />
   </ItemGroup>
 
 </Project>

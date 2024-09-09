@@ -1,8 +1,10 @@
 using FastFood;
+using FastFood.Core.Services;
 using FastFood.Middleware;
 using FastFood.Startup;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 // passed in the builder configuratio for use in registration of sql server database
 // passed in builder.host for the injection of IHostBuilder in DISetup
 builder.Services.RegisterService(builder.Host, builder.Configuration);
+
+
 
 var app = builder.Build();
 

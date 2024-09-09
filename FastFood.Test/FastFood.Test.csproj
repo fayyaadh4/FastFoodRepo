@@ -26,9 +26,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FastFood.Domain\FastFood.Domain.csproj" />
-    <ProjectReference Include="..\FastFood.Repo\FastFood.Infrastructure.csproj" />
-    <ProjectReference Include="..\FastFood.Services\FastFood.Core.csproj" />
-    <ProjectReference Include="..\FastFood\FastFood.Presentation.csproj" />
+    <ProjectReference Include="..\FastFood.Infrastructure\FastFood.Infrastructure.csproj" />
+    <ProjectReference Include="..\FastFood.Core\FastFood.Core.csproj" />
+    <ProjectReference Include="..\FastFood.Presentation\FastFood.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
