@@ -50,7 +50,7 @@ namespace FastFood.Application.Services
             var restaurantsToDelete = await _restaurantRepository.GetRestaurant(restaurantId);
 
 
-            if (!await _menuItemRepository.DeleteMenuItems(menuItemsToDelete.ToList()))
+            if ((!await _menuItemRepository.DeleteMenuItems(menuItemsToDelete.ToList())) && menuItemsToDelete.Count() > 0)
             {
                 throw new Exception("Something went wrong deleting menu items");
             }

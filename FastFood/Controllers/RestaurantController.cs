@@ -1,6 +1,7 @@
 ﻿
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastFood.Controllers
@@ -142,6 +143,7 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
+        [Authorize]
         public async Task<IActionResult> DeleteRestaurant(int restaurantId)
         {
             await _restaurantService.DeleteRestaurant(restaurantId);
