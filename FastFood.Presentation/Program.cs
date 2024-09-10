@@ -1,5 +1,6 @@
 using FastFood;
 using FastFood.Core.Services;
+using FastFood.Domain.Entities;
 using FastFood.Middleware;
 using FastFood.Startup;
 using Microsoft.AspNetCore.Identity;
