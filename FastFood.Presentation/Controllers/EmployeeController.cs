@@ -1,6 +1,9 @@
 ﻿
+using FastFood.Core.Services.EmployeeCQRS.Commands;
+using FastFood.Core.Services.EmployeeCQRS.Queries;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastFood.Controllers
@@ -11,12 +14,15 @@ namespace FastFood.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly IEmployeeLeaveService _employeeLeaveService;
+        private readonly IMediator _mediator;
 
         public EmployeeController(IEmployeeService employeeService,
-            IEmployeeLeaveService employeeLeaveService)
+            IEmployeeLeaveService employeeLeaveService,
+            IMediator mediator)
         {
             _employeeService = employeeService;
             _employeeLeaveService = employeeLeaveService;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -24,9 +30,9 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEmployees()
         {
-            var employees = await _employeeService.GetEmployees();
-
-            return Ok(employees);
+            var query = new GetEmployeesQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -34,10 +40,10 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEmployee(int id) 
         {
-            var employee = await _employeeService.GetEmployee(id);
+            var query = new GetEmployeeQuery(id);
+            var result = await _mediator.Send(query);
             
-
-            return Ok(employee);
+            return Ok(result);
         }
 
         [HttpGet("{employeeId}/leave")]
@@ -55,7 +61,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto createEmployee)
         {
-            await _employeeService.CreateEmployee(createEmployee);
+            var command = new CreateEmployeeCommand(createEmployee);
+            var result = await _mediator.Send(command);
 
             return Ok("Employee created successfully");
 
@@ -67,7 +74,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateEmployee(int employeeId, [FromBody] EmployeeDto updateEmployee)
         {
-            await _employeeService.UpdateEmployee(employeeId, updateEmployee);
+            var command = new UpdateEmployeeCommand(employeeId, updateEmployee);
+            var result = await _mediator.Send(command);
             return NoContent();
 
         }
@@ -79,7 +87,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteEmployee(int employeeId)
         {
-            await _employeeService.DeleteEmployee(employeeId);
+            var command = new DeleteEmployeeCommand(employeeId);
+            var result = await _mediator.Send(command);
             return NoContent();
 
         }

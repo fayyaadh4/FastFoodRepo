@@ -1,6 +1,10 @@
 ﻿
+using FastFood.Core.Services.EmployeeCQRS.Commands;
+using FastFood.Core.Services.EmployeeRoleCQRS.Commands;
+using FastFood.Core.Services.EmployeeRoleCQRS.Queries;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastFood.Controllers
@@ -10,10 +14,13 @@ namespace FastFood.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
+        private readonly IMediator _mediator;
 
-        public RoleController(IRoleService roleService)
+        public RoleController(IRoleService roleService,
+            IMediator mediator)
         {
             _roleService = roleService;
+            _mediator = mediator;
         }
 
 
@@ -22,10 +29,9 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetRole(int id)
         {
-            var role = await _roleService.GetRole(id);
-
-
-            return Ok(role);
+            var query = new GetRoleQuery(id);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -33,19 +39,20 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetRoles()
         {
-            var roles = await _roleService.GetRoles();
-
-            return Ok(roles);
+            var query = new GetRolesQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
-        [HttpGet("empployees/{roleId}")]
+        [HttpGet("employees/{roleId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<EmployeeDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetEmployeesByRole(int roleId)
         {
-            var employees = await _roleService.GetEmployeesByRole(roleId);
-
-            return Ok(employees);
+            var query = new GetEmployeesByRoleQuery(roleId);
+            var result = await _mediator.Send(query);
+            
+            return Ok(result);
         }
 
         [HttpPost]
@@ -53,7 +60,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateRole([FromBody] EmployeeRoleDto createRole)
         {
-            await _roleService.CreateRole(createRole);
+            var command = new CreateRoleCommand(createRole);
+            var result = await _mediator.Send(command);
             return Ok("Role successfully created");
         }
 
@@ -64,7 +72,8 @@ namespace FastFood.Controllers
         public async Task<IActionResult> UpdateRole(int roleId,
              [FromBody] EmployeeRoleDto updateRole)
         {
-            await _roleService.UpdateRole(roleId, updateRole);
+            var command = new UpdateRoleCommand(roleId, updateRole);
+            var result = await _mediator.Send(command);
             return NoContent();
         }
 
@@ -74,7 +83,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteRole(int roleId)
         {
-            await _roleService.DeleteRole(roleId);
+            var command = new DeleteRoleCommand(roleId);
+            var result = await _mediator.Send(command);
             return NoContent();
 
 

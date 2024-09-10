@@ -1,23 +1,24 @@
 ﻿using AutoMapper;
+using FastFood.Core.Services.RestaurantCQRS.Queries;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
-using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastFood.Application.Services
+namespace FastFood.Core.Services.RestaurantCQRS.QueryHandler
 {
-    public class RestaurantService : IRestaurantService
+    public class GetMenuItemsByRestaurantQueryHandler : IRequestHandler<GetMenuItemsByRestaurantQuery, ICollection<MenuItemDto>>
     {
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IMapper _mapper;
 
-        public RestaurantService(IRestaurantRepository restaurantRepository,
+        public GetMenuItemsByRestaurantQueryHandler(IRestaurantRepository restaurantRepository,
                                   IMenuItemRepository menuItemRepository,
                                   IMapper mapper)
         {
@@ -25,16 +26,11 @@ namespace FastFood.Application.Services
             _menuItemRepository = menuItemRepository;
             _mapper = mapper;
         }
-
-
-
-
-
-        public async Task<RestaurantDto?> CheckDuplicateRestaurant(RestaurantDto restaurant)
+        public async Task<ICollection<MenuItemDto>> Handle(GetMenuItemsByRestaurantQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<List<RestaurantDto>>(await _restaurantRepository.GetRestaurants())
-                .Where(r => r.Name == restaurant.Name)
-                .FirstOrDefault();
+            var menuItems = _mapper.Map<List<MenuItemDto>>(await _restaurantRepository.GetMenuItemsByRestaurant(request.RestaurantId));
+
+            return menuItems;
         }
     }
 }

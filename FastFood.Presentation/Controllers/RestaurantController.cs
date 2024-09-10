@@ -53,9 +53,10 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetMenuItemsByRestaurant(int restaurantId)
         {
-            var menuItems = await _restaurantService.GetMenuItemsByRestaurant(restaurantId);
-
-            return Ok(menuItems);
+            var query = new GetMenuItemsByRestaurantQuery(restaurantId);
+            var result = await _mediatr.Send(query);
+            
+            return Ok(result);
         }
 
         [HttpPost]

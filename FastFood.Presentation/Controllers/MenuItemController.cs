@@ -1,6 +1,9 @@
 ﻿
+using FastFood.Core.Services.MenuItemCQRS.Commands;
+using FastFood.Core.Services.MenuItemCQRS.Queries;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastFood.Controllers
@@ -10,10 +13,13 @@ namespace FastFood.Controllers
     public class MenuItemController : Controller
     {
         private readonly IMenuItemService _menuItemService;
+        private readonly IMediator _mediator;
 
-        public MenuItemController(IMenuItemService menuItemService)
+        public MenuItemController(IMenuItemService menuItemService,
+            IMediator mediator)
         {
             _menuItemService = menuItemService;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -21,17 +27,19 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetMenuItems()
         {
-            var menuItems = await _menuItemService.GetMenuItems();
+            var query = new GetMenuItemsQuery();
+            var result = await _mediator.Send(query);
 
-            return Ok(menuItems);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(204, Type = typeof(MenuItemDto))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetMenuItem(int id) {
-            var menuItem = await _menuItemService.GetMenuItem(id);
-            return Ok(menuItem);
+            var query = new GetMenuItemQuery(id);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -39,7 +47,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateMenuItem([FromBody] MenuItemDto createMenuItem)
         {
-            await _menuItemService.CreateMenuItem(createMenuItem);
+            var command = new CreateMenuItemCommand(createMenuItem);
+            var result = await _mediator.Send(command);
 
             return Ok("Menu item created successfully");
         
@@ -51,7 +60,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateMenuItem(int id, [FromBody] MenuItemDto menuItemUpdate)
         {
-            await _menuItemService.UpdateMenuItem(id,menuItemUpdate);
+            var command = new UpdateMenuItemCommand(id, menuItemUpdate);
+            var result = await _mediator.Send(command);
 
             return NoContent();
         }
@@ -62,7 +72,8 @@ namespace FastFood.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteMenuItem(int id)
         {
-            await _menuItemService.DeleteMenuItem(id);
+            var command = new DeleteMenuItemCommand(id);
+            var result = await _mediator.Send(command);
             return NoContent();
 
         }
