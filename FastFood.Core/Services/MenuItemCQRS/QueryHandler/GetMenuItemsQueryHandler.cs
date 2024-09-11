@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Core.Services.MenuItemCQRS.Queries;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Dto;
 using MediatR;
 using Serilog;
@@ -14,21 +15,18 @@ namespace FastFood.Core.Services.MenuItemCQRS.QueryHandler
 {
     public class GetMenuItemsQueryHandler : IRequestHandler<GetMenuItemsQuery, ICollection<MenuItemDto>>
     {
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetMenuItemsQueryHandler(IMenuItemRepository menuItemRepository,
-            IRestaurantRepository restaurantRepository,
+        public GetMenuItemsQueryHandler(IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _menuItemRepository = menuItemRepository;
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<ICollection<MenuItemDto>> Handle(GetMenuItemsQuery request, CancellationToken cancellationToken)
         {
-            var menuItems = _mapper.Map<List<MenuItemDto>>(await _menuItemRepository.GetMenuItems());
+            var menuItems = _mapper.Map<List<MenuItemDto>>(await _unitOfWork.MenuItem.GetAll());
 
             Log.Information("Get Menu Items - Serilog => {@menuItems}", menuItems);
 

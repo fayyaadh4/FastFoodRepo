@@ -2,6 +2,7 @@
 using FastFood.Core.Services.EmployeeCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using MediatR;
 using System;
@@ -14,24 +15,24 @@ namespace FastFood.Core.Services.EmployeeCQRS.CommandHandler
 {
     public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, bool>
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public DeleteEmployeeCommandHandler(
-            IEmployeeRepository employeeRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _employeeRepository = employeeRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<bool> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
         {
-            if (!await _employeeRepository.EmployeeExists(request.EmployeeId))
+            if (!await _unitOfWork.Employee.Exists(request.EmployeeId))
                 throw new Exception("Employee not found");
 
-            var employeeToDelete = await _employeeRepository.GetEmployee(request.EmployeeId);
+            var employeeToDelete = await _unitOfWork.Employee.GetById(request.EmployeeId);
 
-            return await _employeeRepository.DeleteEmployee(employeeToDelete);
+            return await _unitOfWork.Employee.Remove(employeeToDelete);
 
         }
     }

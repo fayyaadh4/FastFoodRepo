@@ -2,6 +2,7 @@
 using FastFood.Core.Services.MenuItemCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,28 +14,25 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 {
     public class DeleteMenuItemCommandHandler: IRequestHandler<DeleteMenuItemCommand, bool>
     {
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DeleteMenuItemCommandHandler(IMenuItemRepository menuItemRepository,
-            IRestaurantRepository restaurantRepository,
+        public DeleteMenuItemCommandHandler(IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _menuItemRepository = menuItemRepository;
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<bool> Handle(DeleteMenuItemCommand request, CancellationToken cancellationToken)
         {
-            if (!await _menuItemRepository.MenuItemExists(request.MenuItemId))
+            if (!await _unitOfWork.MenuItem.Exists(request.MenuItemId))
                 throw new Exception("Menu item already exists");
 
 
-            var menuItemToDelete = await _menuItemRepository.GetMenuItem(request.MenuItemId);
+            var menuItemToDelete = await _unitOfWork.MenuItem.GetById(request.MenuItemId);
 
-            return await _menuItemRepository.DeleteMenuItem(menuItemToDelete);
+            return await _unitOfWork.MenuItem.Remove(menuItemToDelete);
 
         }
     }

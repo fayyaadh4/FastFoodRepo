@@ -2,6 +2,7 @@
 using FastFood.Core.Services.RestaurantCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
 using MediatR;
@@ -15,19 +16,16 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
 {
     public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCommand, bool>
     {
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IRestaurantService _restaurantService;
-        private readonly IMenuItemRepository _menuItemRepository;
         private readonly IMapper _mapper;
 
-        public CreateRestaurantCommandHandler(IRestaurantRepository restaurantRepository,
+        public CreateRestaurantCommandHandler(IUnitOfWork unitOfWork,
             IRestaurantService restaurantService,
-        IMenuItemRepository menuItemRepository,
                                   IMapper mapper)
         {
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _restaurantService = restaurantService;
-            _menuItemRepository = menuItemRepository;
             _mapper = mapper;
         }
 
@@ -40,7 +38,7 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
             }
             var restaurantMap = _mapper.Map<Restaurant>(request.CreateRestaurant);
 
-            return await _restaurantRepository.CreateRestaurant(restaurantMap);
+            return await _unitOfWork.Restaurant.Add(restaurantMap);
         }
     }
 }

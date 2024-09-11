@@ -2,6 +2,7 @@
 using FastFood.Core.Services.MenuItemCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,13 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 {
     public class UpdateMenuItemCommandHandler : IRequestHandler<UpdateMenuItemCommand, bool>
     {
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateMenuItemCommandHandler(IMenuItemRepository menuItemRepository,
-            IRestaurantRepository restaurantRepository,
+        public UpdateMenuItemCommandHandler(IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _menuItemRepository = menuItemRepository;
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<bool> Handle(UpdateMenuItemCommand request, CancellationToken cancellationToken)
@@ -30,7 +28,7 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
             if (request.UpdateMenuItem == null)
                 throw new Exception("Body cannot be null");
 
-            if (!await _menuItemRepository.MenuItemExists(request.MenuItemId))
+            if (!await _unitOfWork.MenuItem.Exists(request.MenuItemId))
                 throw new Exception("Menu item already exists");
 
             if (request.MenuItemId != request.UpdateMenuItem.Id)
@@ -38,7 +36,7 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 
             var menuItemMap = _mapper.Map<MenuItem>(request.UpdateMenuItem);
 
-            return await _menuItemRepository.UpdateMenuItem(menuItemMap);
+            return await _unitOfWork.MenuItem.Update(menuItemMap);
 
         }
     }

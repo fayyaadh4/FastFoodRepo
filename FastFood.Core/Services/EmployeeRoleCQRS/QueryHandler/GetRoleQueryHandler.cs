@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Core.Services.EmployeeRoleCQRS.Queries;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Dto;
 using MediatR;
 using System;
@@ -13,20 +14,20 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.QueryHandler
 {
     public class GetRoleQueryHandler : IRequestHandler<GetRoleQuery, EmployeeRoleDto>
     {
-        private readonly IEmployeeRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetRoleQueryHandler(IEmployeeRoleRepository roleRepository, IMapper mapper)
+        public GetRoleQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<EmployeeRoleDto> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
-            if (!await _roleRepository.RoleExists(request.EmployeeRoleId))
+            if (!await _unitOfWork.EmployeeRole.Exists(request.EmployeeRoleId))
                 throw new Exception("Role not found");
 
-            var role = _mapper.Map<EmployeeRoleDto>(await _roleRepository.GetRole(request.EmployeeRoleId));
+            var role = _mapper.Map<EmployeeRoleDto>(await _unitOfWork.EmployeeRole.GetById(request.EmployeeRoleId));
 
 
             return role;

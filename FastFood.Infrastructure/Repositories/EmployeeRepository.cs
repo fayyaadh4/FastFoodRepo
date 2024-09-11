@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using FastFood.Domain.Interfaces;
 using FastFood.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -70,3 +70,4 @@ namespace FastFood.Repo.Repositories
         }
     }
 }
+*/

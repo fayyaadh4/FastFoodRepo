@@ -2,6 +2,7 @@
 using FastFood.Core.Services.RestaurantCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using MediatR;
 using System;
@@ -14,19 +15,16 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
 {
     public class UpdateRestaurantCommandHandler : IRequestHandler<UpdateRestaurantCommand, bool>
     {
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IRestaurantService _restaurantService;
-        private readonly IMenuItemRepository _menuItemRepository;
         private readonly IMapper _mapper;
 
-        public UpdateRestaurantCommandHandler(IRestaurantRepository restaurantRepository,
+        public UpdateRestaurantCommandHandler(IUnitOfWork unitOfWork,
             IRestaurantService restaurantService,
-        IMenuItemRepository menuItemRepository,
                                   IMapper mapper)
         {
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _restaurantService = restaurantService;
-            _menuItemRepository = menuItemRepository;
             _mapper = mapper;
         }
 
@@ -38,11 +36,11 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
             if (request.RestaurantId != request.UpdateRestaurant.Id)
                 throw new Exception("Restaurant Id's need to match");
 
-            if (!await _restaurantRepository.RestaurantExists(request.RestaurantId))
+            if (!await _unitOfWork.Restaurant.Exists(request.RestaurantId))
                 throw new Exception("Restaurant does not exist");
             var restaurantMap = _mapper.Map<Restaurant>(request.UpdateRestaurant);
 
-            return await _restaurantRepository.UpdateRestaurant(restaurantMap);
+            return await _unitOfWork.Restaurant.Update(restaurantMap);
         }
     }
 }

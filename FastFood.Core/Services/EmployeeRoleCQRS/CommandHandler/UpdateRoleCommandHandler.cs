@@ -2,6 +2,7 @@
 using FastFood.Core.Services.EmployeeRoleCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,12 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
 {
     public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, bool>
     {
-        private readonly IEmployeeRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateRoleCommandHandler(IEmployeeRoleRepository roleRepository, IMapper mapper)
+        public UpdateRoleCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<bool> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
@@ -29,13 +30,13 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
             if (request.EmpRoleId != request.UpdateEmployeeRole.Id)
                 throw new Exception("ID mismatch");
 
-            if (!await _roleRepository.RoleExists(request.EmpRoleId))
+            if (!await _unitOfWork.EmployeeRole.Exists(request.EmpRoleId))
                 throw new Exception("Role already exists");
 
             var roleMap = _mapper.Map<EmployeeRole>(request.UpdateEmployeeRole);
 
 
-            return await _roleRepository.UpdateRole(roleMap);
+            return await _unitOfWork.EmployeeRole.Update(roleMap);
 
         }
     }

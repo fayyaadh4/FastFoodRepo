@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Core.Services.EmployeeCQRS.Queries;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Dto;
 using MediatR;
 using System;
@@ -13,19 +14,19 @@ namespace FastFood.Core.Services.EmployeeCQRS.QueryHandler
 {
     public class GetEmployeesQueryHandler : IRequestHandler<GetEmployeesQuery, ICollection<EmployeeDto>>
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public GetEmployeesQueryHandler(
-            IEmployeeRepository employeeRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _employeeRepository = employeeRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<ICollection<EmployeeDto>> Handle(GetEmployeesQuery request, CancellationToken cancellationToken)
         {
-            var employees = _mapper.Map<List<EmployeeDto>>(await _employeeRepository.GetEmployees());
+            var employees = _mapper.Map<List<EmployeeDto>>(await _unitOfWork.Employee.GetAll());
 
 
             return employees;

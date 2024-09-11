@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
 using System;
@@ -13,16 +14,13 @@ namespace FastFood.Application.Services
 {
     public class RestaurantService : IRestaurantService
     {
-        private readonly IRestaurantRepository _restaurantRepository;
-        private readonly IMenuItemRepository _menuItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public RestaurantService(IRestaurantRepository restaurantRepository,
-                                  IMenuItemRepository menuItemRepository,
+        public RestaurantService(IUnitOfWork unitOfWork,
                                   IMapper mapper)
         {
-            _restaurantRepository = restaurantRepository;
-            _menuItemRepository = menuItemRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -32,7 +30,7 @@ namespace FastFood.Application.Services
 
         public async Task<RestaurantDto?> CheckDuplicateRestaurant(RestaurantDto restaurant)
         {
-            return _mapper.Map<List<RestaurantDto>>(await _restaurantRepository.GetRestaurants())
+            return _mapper.Map<List<RestaurantDto>>(await _unitOfWork.Restaurant.GetAll())
                 .Where(r => r.Name == restaurant.Name)
                 .FirstOrDefault();
         }

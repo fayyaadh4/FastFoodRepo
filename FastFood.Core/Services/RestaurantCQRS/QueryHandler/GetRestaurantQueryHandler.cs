@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Core.Services.RestaurantCQRS.Queries;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Dto;
 using MediatR;
 using System;
@@ -13,21 +14,18 @@ namespace FastFood.Core.Services.RestaurantCQRS.QueryHandler
 {
     public class GetRestaurantQueryHandler : IRequestHandler<GetRestaurantQuery, RestaurantDto>
     {
-        private readonly IRestaurantRepository _restaurantRepository;
-        private readonly IMenuItemRepository _menuItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetRestaurantQueryHandler(IRestaurantRepository restaurantRepository,
-                                  IMenuItemRepository menuItemRepository,
+        public GetRestaurantQueryHandler(IUnitOfWork unitOfWork,
                                   IMapper mapper)
         {
-            _restaurantRepository = restaurantRepository;
-            _menuItemRepository = menuItemRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<RestaurantDto> Handle(GetRestaurantQuery request, CancellationToken cancellationToken)
         {
-            var restaurant = _mapper.Map<RestaurantDto>(await _restaurantRepository.GetRestaurant(request.RestaurantId));
+            var restaurant = _mapper.Map<RestaurantDto>(await _unitOfWork.Restaurant.GetById(request.RestaurantId));
 
             return restaurant;
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Core.Services.MenuItemCQRS.Queries;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Dto;
 using MediatR;
 using MediatR.Wrappers;
@@ -14,24 +15,21 @@ namespace FastFood.Core.Services.MenuItemCQRS.QueryHandler
 {
     public class GetMenuItemQueryHandler : IRequestHandler<GetMenuItemQuery, MenuItemDto>
     {
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetMenuItemQueryHandler(IMenuItemRepository menuItemRepository,
-            IRestaurantRepository restaurantRepository,
+        public GetMenuItemQueryHandler(IUnitOfWork unitOfWork,
             IMapper mapper)
         {
-            _menuItemRepository = menuItemRepository;
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<MenuItemDto> Handle(GetMenuItemQuery request, CancellationToken cancellationToken)
         {
-            if (!await _menuItemRepository.MenuItemExists(request.MenuItemId))
+            if (!await _unitOfWork.MenuItem.Exists(request.MenuItemId))
                 throw new Exception("Menu item not found");
 
-            var menuItem = _mapper.Map<MenuItemDto>(await _menuItemRepository.GetMenuItem(request.MenuItemId));
+            var menuItem = _mapper.Map<MenuItemDto>(await _unitOfWork.MenuItem.GetById(request.MenuItemId));
 
 
             return menuItem;

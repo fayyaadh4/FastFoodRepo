@@ -2,9 +2,10 @@
 using FastFood.Application.Services;
 using FastFood.Core.Services;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
+using FastFood.Infrastructure.Implementation;
 using FastFood.Repo.Data;
-using FastFood.Repo.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,11 +33,12 @@ namespace FastFood.Startup
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //registers the relationship between the interface and the repository implementing it
-            services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+            // NOT USING AS IM USING UNITOFWORK
+            /*services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IEmployeeRoleRepository, RoleRepository>();
+            services.AddScoped<IEmployeeRoleRepository, RoleRepository>();*/
 
             // register services in Dependency injection container
             services.AddScoped<IMenuItemService, MenuItemService>();
@@ -44,6 +46,9 @@ namespace FastFood.Startup
             services.AddScoped<IEmployeeLeaveService, EmployeeLeaveService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRoleService, RoleService>();
+
+            // register unit of work 
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 

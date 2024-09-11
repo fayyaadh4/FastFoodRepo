@@ -2,6 +2,7 @@
 using FastFood.Core.Services.MenuItemCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using MediatR;
 using System;
@@ -14,18 +15,15 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 {
     public class CreateMenuItemCommandHandler : IRequestHandler<CreateMenuItemCommand, bool>
     {
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMenuItemService _menuItemService;
         private readonly IMapper _mapper;
 
-        public CreateMenuItemCommandHandler(IMenuItemRepository menuItemRepository,
-            IRestaurantRepository restaurantRepository,
+        public CreateMenuItemCommandHandler(IUnitOfWork unitOfWork,
             IMenuItemService menuItemService,
             IMapper mapper)
         {
-            _menuItemRepository = menuItemRepository;
-            _restaurantRepository = restaurantRepository;
+            _unitOfWork = unitOfWork;
             _menuItemService = menuItemService;
             _mapper = mapper;
         }
@@ -35,7 +33,7 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
             if (request.MenuItem == null)
                 throw new Exception("Body cannot be empty");
 
-            if (!await _restaurantRepository.RestaurantExists(request.MenuItem.RestaurantId))
+            if (!await _unitOfWork.Restaurant.Exists(request.MenuItem.RestaurantId))
                 throw new Exception("Restaurant does not exist");
 
             var menuItemExists = await _menuItemService.CheckDuplicateMenuItem(request.MenuItem);
@@ -48,7 +46,7 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 
             var menuItemMap = _mapper.Map<MenuItem>(request.MenuItem);
 
-            return await _menuItemRepository.CreateMenuItem(menuItemMap);
+            return await _unitOfWork.MenuItem.Add(menuItemMap);
 
         }
     }

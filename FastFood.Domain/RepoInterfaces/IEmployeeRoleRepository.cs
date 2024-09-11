@@ -1,10 +1,12 @@
 ﻿using FastFood.Domain.Entities;
+using FastFood.Domain.RepoInterfaces;
 
 namespace FastFood.Domain.Interfaces
 {
-    public interface IEmployeeRoleRepository
+    public interface IEmployeeRoleRepository : IGenericRepository<EmployeeRole>
     {
-        Task<ICollection<EmployeeRole>> GetRoles();
+        Task<ICollection<Employee>> GetEmployeesByRole(int empRoleId);
+        /* Task<ICollection<EmployeeRole>> GetRoles();
         Task<EmployeeRole?> GetRole(int id);
         Task<bool> RoleExists(int id);
         Task<ICollection<Employee>> GetEmployeesByRole(int empRoleId);
@@ -13,6 +15,6 @@ namespace FastFood.Domain.Interfaces
         Task<bool> Save();
 
         Task<bool> UpdateRole(EmployeeRole empRole);
-        Task<bool> DeleteRole(EmployeeRole empRole);
+        Task<bool> DeleteRole(EmployeeRole empRole); */
     }
 }

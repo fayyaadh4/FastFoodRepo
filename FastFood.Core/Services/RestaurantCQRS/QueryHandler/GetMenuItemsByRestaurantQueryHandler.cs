@@ -2,6 +2,7 @@
 using FastFood.Core.Services.RestaurantCQRS.Queries;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Dto;
 using MediatR;
 using System;
@@ -14,21 +15,18 @@ namespace FastFood.Core.Services.RestaurantCQRS.QueryHandler
 {
     public class GetMenuItemsByRestaurantQueryHandler : IRequestHandler<GetMenuItemsByRestaurantQuery, ICollection<MenuItemDto>>
     {
-        private readonly IRestaurantRepository _restaurantRepository;
-        private readonly IMenuItemRepository _menuItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetMenuItemsByRestaurantQueryHandler(IRestaurantRepository restaurantRepository,
-                                  IMenuItemRepository menuItemRepository,
+        public GetMenuItemsByRestaurantQueryHandler(IUnitOfWork unitOfWork,
                                   IMapper mapper)
         {
-            _restaurantRepository = restaurantRepository;
-            _menuItemRepository = menuItemRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<ICollection<MenuItemDto>> Handle(GetMenuItemsByRestaurantQuery request, CancellationToken cancellationToken)
         {
-            var menuItems = _mapper.Map<List<MenuItemDto>>(await _restaurantRepository.GetMenuItemsByRestaurant(request.RestaurantId));
+            var menuItems = _mapper.Map<List<MenuItemDto>>(await _unitOfWork.Restaurant.GetMenuItemsByRestaurant(request.RestaurantId));
 
             return menuItems;
         }

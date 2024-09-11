@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FastFood.Core.Services.EmployeeRoleCQRS.Commands;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,23 +13,23 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
 {
     public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, bool>
     {
-        private readonly IEmployeeRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DeleteRoleCommandHandler(IEmployeeRoleRepository roleRepository, IMapper mapper)
+        public DeleteRoleCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         public async Task<bool> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
         {
-            if (!await _roleRepository.RoleExists(request.EmpRoleId))
+            if (!await _unitOfWork.EmployeeRole.Exists(request.EmpRoleId))
                 throw new Exception("Role not found");
 
-            var roleToDelete = await _roleRepository.GetRole(request.EmpRoleId);
+            var roleToDelete = await _unitOfWork.EmployeeRole.GetById(request.EmpRoleId);
 
 
-            return await _roleRepository.DeleteRole(roleToDelete);
+            return await _unitOfWork.EmployeeRole.Remove(roleToDelete);
 
         }
     }

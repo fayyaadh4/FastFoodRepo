@@ -2,6 +2,7 @@
 using FastFood.Core.Services.EmployeeRoleCQRS.Commands;
 using FastFood.Domain.Entities;
 using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
 using MediatR;
@@ -16,15 +17,15 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
 {
     public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, bool>
     {
-        private readonly IEmployeeRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
 
-        public CreateRoleCommandHandler(IEmployeeRoleRepository roleRepository,
+        public CreateRoleCommandHandler(IUnitOfWork unitOfWork,
             IRoleService roleService,
             IMapper mapper)
         {
-            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
             _roleService = roleService;
             _mapper = mapper;
         }
@@ -42,7 +43,7 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
 
             var roleMap = _mapper.Map<EmployeeRole>(request.EmployeeRole);
 
-            return await _roleRepository.CreateRole(roleMap);
+            return await _unitOfWork.EmployeeRole.Update(roleMap);
 
         }
     }

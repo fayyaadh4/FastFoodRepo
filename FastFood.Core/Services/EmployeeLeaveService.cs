@@ -1,4 +1,5 @@
 ﻿using FastFood.Domain.Interfaces;
+using FastFood.Domain.RepoInterfaces;
 using FastFood.Domain.ServiceInterfaces;
 using FastFood.Dto;
 using Microsoft.Extensions.Configuration;
@@ -9,13 +10,13 @@ namespace FastFood.Application.Services
 {
     public class EmployeeLeaveService : IEmployeeLeaveService
     {
-        private readonly IEmployeeLeaveRepository _employeeLeaveRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-        public EmployeeLeaveService(IEmployeeLeaveRepository employeeLeaveRepository,
+        public EmployeeLeaveService(IUnitOfWork unitOfWork,
             IConfiguration configuration) 
         {
-            _employeeLeaveRepository = employeeLeaveRepository;
+            _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
 
@@ -37,7 +38,7 @@ namespace FastFood.Application.Services
         {
             var response = new EmployeeLeaveDto();
 
-            await _employeeLeaveRepository.GetLeave(employeeId);
+            await _unitOfWork.EmployeeLeave.GetById(employeeId);
 
 
             return response;
