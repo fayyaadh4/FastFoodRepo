@@ -48,7 +48,9 @@ namespace FastFood.Core.Services.EmployeeCQRS.CommandHandler
             var employeeMap = _mapper.Map<Employee>(request.UpdateEmployee);
 
 
-            return await _unitOfWork.Employee.Update(employeeMap);
+            await _unitOfWork.Employee.Update(employeeMap);
+
+            return await _unitOfWork.CompleteAsync();
 
         }
     }

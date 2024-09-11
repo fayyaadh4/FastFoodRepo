@@ -32,7 +32,8 @@ namespace FastFood.Core.Services.EmployeeCQRS.CommandHandler
 
             var employeeToDelete = await _unitOfWork.Employee.GetById(request.EmployeeId);
 
-            return await _unitOfWork.Employee.Remove(employeeToDelete);
+            await _unitOfWork.Employee.Remove(employeeToDelete);
+            return await _unitOfWork.CompleteAsync();
 
         }
     }

@@ -40,7 +40,8 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
                 throw new Exception("Restaurant does not exist");
             var restaurantMap = _mapper.Map<Restaurant>(request.UpdateRestaurant);
 
-            return await _unitOfWork.Restaurant.Update(restaurantMap);
+            await _unitOfWork.Restaurant.Update(restaurantMap);
+            return await _unitOfWork.CompleteAsync();
         }
     }
 }

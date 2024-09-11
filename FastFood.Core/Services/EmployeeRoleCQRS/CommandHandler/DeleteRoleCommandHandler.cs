@@ -29,7 +29,8 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
             var roleToDelete = await _unitOfWork.EmployeeRole.GetById(request.EmpRoleId);
 
 
-            return await _unitOfWork.EmployeeRole.Remove(roleToDelete);
+            await _unitOfWork.EmployeeRole.Remove(roleToDelete);
+            return await _unitOfWork.CompleteAsync();
 
         }
     }

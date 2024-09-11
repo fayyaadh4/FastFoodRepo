@@ -38,7 +38,8 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
             }
             var restaurantMap = _mapper.Map<Restaurant>(request.CreateRestaurant);
 
-            return await _unitOfWork.Restaurant.Add(restaurantMap);
+             await _unitOfWork.Restaurant.Add(restaurantMap);
+            return await _unitOfWork.CompleteAsync();
         }
     }
 }

@@ -43,7 +43,8 @@ namespace FastFood.Core.Services.EmployeeRoleCQRS.CommandHandler
 
             var roleMap = _mapper.Map<EmployeeRole>(request.EmployeeRole);
 
-            return await _unitOfWork.EmployeeRole.Update(roleMap);
+            await _unitOfWork.EmployeeRole.Update(roleMap);
+            return await _unitOfWork.CompleteAsync();
 
         }
     }

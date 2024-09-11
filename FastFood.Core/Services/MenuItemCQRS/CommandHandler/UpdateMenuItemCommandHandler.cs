@@ -36,7 +36,8 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 
             var menuItemMap = _mapper.Map<MenuItem>(request.UpdateMenuItem);
 
-            return await _unitOfWork.MenuItem.Update(menuItemMap);
+            await _unitOfWork.MenuItem.Update(menuItemMap);
+            return await _unitOfWork.CompleteAsync();
 
         }
     }

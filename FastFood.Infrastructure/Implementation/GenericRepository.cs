@@ -23,7 +23,7 @@ namespace FastFood.Infrastructure.Implementation
         public async Task<bool> Add(T entity)
         {
             await _dbSet.AddAsync(entity);
-            return await CompleteAsync();
+            return true;
         }
         public async Task<bool> Exists(int id)
         {
@@ -45,7 +45,7 @@ namespace FastFood.Infrastructure.Implementation
         public async Task<bool> Remove(T entity)
         {
             _dbSet.Remove(entity);
-            return await CompleteAsync();
+            return true;
         }
 
         public async Task<bool> RemoveMany(ICollection<T> entities)
@@ -54,15 +54,10 @@ namespace FastFood.Infrastructure.Implementation
             return true;
         }
 
-        public async Task<bool> CompleteAsync()
-        {
-            var saved = await _context.SaveChangesAsync();
-            return saved > 0 ? true : false;
-        }
         public async Task<bool> Update(T entity)
         {
             _dbSet.Update(entity);
-            return await CompleteAsync();
+            return true;
         }
     }
 }

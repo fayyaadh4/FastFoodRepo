@@ -27,6 +27,11 @@ namespace FastFood.Infrastructure.Implementation
         public IEmployeeRepository Employee { get; private set; }
         public IEmployeeLeaveRepository EmployeeLeave { get; private set; }
         public IEmployeeRoleRepository EmployeeRole { get; private set; }
+        public async Task<bool> CompleteAsync()
+        {
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0 ? true : false;
+        }
         public void Dispose()
         {
             _context.Dispose();

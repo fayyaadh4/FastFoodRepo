@@ -18,6 +18,5 @@ namespace FastFood.Domain.RepoInterfaces
         Task<bool> Update(T entity);
         Task<bool> Remove(T entity);
         Task<bool> RemoveMany(ICollection<T> entities);
-        Task<bool> CompleteAsync();
     }
 }

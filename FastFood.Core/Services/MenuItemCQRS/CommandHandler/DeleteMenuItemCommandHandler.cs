@@ -32,7 +32,8 @@ namespace FastFood.Core.Services.MenuItemCQRS.CommandHandler
 
             var menuItemToDelete = await _unitOfWork.MenuItem.GetById(request.MenuItemId);
 
-            return await _unitOfWork.MenuItem.Remove(menuItemToDelete);
+            await _unitOfWork.MenuItem.Remove(menuItemToDelete);
+            return await _unitOfWork.CompleteAsync();
 
         }
     }

@@ -14,5 +14,6 @@ namespace FastFood.Domain.RepoInterfaces
         IEmployeeRepository Employee { get; }
         IEmployeeLeaveRepository EmployeeLeave { get; }
         IEmployeeRoleRepository EmployeeRole { get; }
+        Task<bool> CompleteAsync();
     }
 }

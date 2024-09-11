@@ -43,7 +43,8 @@ namespace FastFood.Core.Services.RestaurantCQRS.CommandHandlers
                 throw new Exception("Something went wrong deleting menu items");
             }
 
-            return await _unitOfWork.Restaurant.Remove(restaurantsToDelete);
+            await _unitOfWork.Restaurant.Remove(restaurantsToDelete);
+            return await _unitOfWork.CompleteAsync();
 
 
         }
